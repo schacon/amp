@@ -13,7 +13,6 @@ class Integer
   # @return [Integer] the number swapped as if it were a 64-bit integer
   def byte_swap_64
     if Amp::Support::SYSTEM[:endian] == :little
-      self
       ((self >> 56))                        | ((self & 0x00FF000000000000) >> 40) |
         ((self & 0x0000FF0000000000) >> 24) | ((self & 0x000000FF00000000) >> 8 ) |
         ((self & 0x00000000FF000000) << 8 ) | ((self & 0x0000000000FF0000) << 24) |
