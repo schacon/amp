@@ -16,8 +16,8 @@ command :view do |c|
     
     output_io = lambda do |filename|
       if opts[:output]
-        path = opts[:output].gsub(/\s/, File.basename(filename)).gsub(/\d/, File.dirname(filename)).
-                             gsub(/\p/, filename)
+        path = opts[:output].gsub(/%s/, File.basename(filename)).gsub(/%d/, File.dirname(filename)).
+                             gsub(/%p/, filename)
         File.open(path, "w")
       else
         $stdout
