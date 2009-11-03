@@ -50,7 +50,7 @@ module Amp
         @branch_cache_tip = tip
         
         # reset the branch cache
-        @branch_cache = (@branch_cache.nil?) ? {} : @branch_cache.clear # returns same hash, but empty
+        @branch_cache = @branch_cache.nil? ? {} : @branch_cache.clear # returns same hash, but empty
         # if we didn't have an old cache, or it was invalid, read in the branches again
         if oldtip.nil? || self.changelog.node_map[oldtip].nil?
           partial, last, last_rev = read_branches!
@@ -118,7 +118,7 @@ module Amp
       #     0987654321098765432109876543210987654321 other_branch
       #
       # In the example, other_branch has 2 heads. This is acceptable. The tip of the
-      # repository is node 0abc3135, revision # 603, which is the only head of the default
+      # repository is node 0abc3135, revision 603, which is the only head of the default
       # branch.
       #
       # @return [[Hash, String, Integer]] The results are returned in the form of:
@@ -131,10 +131,9 @@ module Amp
         
         begin
           # read in all the lines. This file should be short, so don't worry about
-          # performance concerns of a File.read() call
-          @hg_opener.open("branchheads.cache") do |f|
-            lines = f.read.split("\n")
-          end
+          # performance concerns of a File.read() call (this call is actually
+          # Opener#read, which then calls File.read)
+          lines @hg_opener.read("branchheads.cache").split("\n")
         rescue SystemCallError # IO Errors, i.e. if there is no branch.cache file
           return {}, NULL_ID, NULL_REV
         end
@@ -160,11 +159,13 @@ module Amp
             partial[_label.strip] << node.unhexlify
           end
         end
+        
         # if invalid was thrown.... bail
-        if !valid
+        unless valid
           UI.puts("invalidating branch cache (tip different)")
           partial, last, last_rev = {}, NULL_ID, NULL_REV
         end
+        
         # Return our results!
         [partial, last, last_rev]
       end
