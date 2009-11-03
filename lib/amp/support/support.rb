@@ -965,6 +965,27 @@ module Amp
       @@rc_path
     end
     
+    
+    ##
+    # Advanced calling of system().
+    #
+    # Allows the caller to provide substitute environment variables and
+    # the directory to use
+    def self.system(command, opts={})
+      backup_dir = Dir.pwd # in case something goes wrong
+      temp_environ, temp_path = opts.delete(:environ), opts.delete(:chdir) || backup_dir
+      
+      old_env = ENV.to_hash if temp_environ
+      temp_environ.each {|k, v| ENV[k] = v.to_s}
+      temp_environ["HG"] = $amp_executable || File.amp_find_executable("amp")
+      Dir.chdir(temp_path) do
+        rc = system(command)
+      end
+    ensure
+      ENV.clear.update(old_env)
+      Dir.chdir(backup_dir)    
+    end
+    
     ##
     # Parses the URL for amp-specific reasons.
     #

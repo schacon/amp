@@ -13,6 +13,7 @@ private :caller_file
 $start   = Time.now
 $display = true
 $cl      = true # this lets us know we're a command line app
+$amp_executable = File.expand_path(__FILE__)
 
 ARGV.each { |arg| $USE_RUBY = true if arg == "--pure-ruby" || arg == '-u' }
 

@@ -133,7 +133,7 @@ module Amp
           # read in all the lines. This file should be short, so don't worry about
           # performance concerns of a File.read() call (this call is actually
           # Opener#read, which then calls File.read)
-          lines @hg_opener.read("branchheads.cache").split("\n")
+          lines = @hg_opener.read("branchheads.cache").split("\n")
         rescue SystemCallError # IO Errors, i.e. if there is no branch.cache file
           return {}, NULL_ID, NULL_REV
         end

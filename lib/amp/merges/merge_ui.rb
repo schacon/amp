@@ -96,7 +96,7 @@ module Amp
           replace = {"local" => a, "base" => b, "other" => c, "output" => out}
           args.gsub!(/\$(local|base|other|output)/) {|match| replace[match]}
           # shelling out
-          ret = system(environment, tool_path+" "+args, :chdir => repo.root)
+          ret = Amp::Support::system(tool_path+" "+args, :chdir => repo.root, :environ => environment)
         end
         ret = (ret == true ? 1 : (ret == false ? 0 : ret))
         if ret == 0 && tool_setting(tool, "checkconflicts")
