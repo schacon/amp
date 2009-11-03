@@ -594,8 +594,8 @@ module Amp
         raise
       end
       
-      puts "The starting point for the data is: #{data_start_for_index(rev)}"   # KILLME
-      puts "We're reading #{length} bytes. Look at data_start_for_index" # KILLME
+      #puts "The starting point for the data is: #{data_start_for_index(rev)}"   # KILLME
+      #puts "We're reading #{length} bytes. Look at data_start_for_index" # KILLME
       
       start += ((rev + 1) * @index.entry_size) if @index.inline?
       
@@ -748,9 +748,9 @@ module Amp
       if curr > 0
         if d.nil? || d.empty?
           ptext = decompress_revision node_id_for_index(prev)
-          p "BEFORE PATCH, in ADD_REVISION: #{ptext}" if @index_file =~ /00changelog/ && false # KILLME
+          #p "BEFORE PATCH, in ADD_REVISION: #{ptext}" if @index_file =~ /00changelog/ && false # KILLME
           d = Diffs::MercurialDiff.text_diff(ptext, text)
-          p "MADE PATCH, in ADD_REVISION: #{d}" if @index_file =~ /00changelog/ && false # KILLME
+          #p "MADE PATCH, in ADD_REVISION: #{d}" if @index_file =~ /00changelog/ && false # KILLME
         end
         data = RevlogSupport::Support.compress d
         len = data[:compression].size + data[:text].size
