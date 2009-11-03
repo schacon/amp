@@ -302,7 +302,7 @@ class File
   # *nix version.
   #
   # @todo Add Windows Version
-  def self.amp_lookup_reg
+  def self.amp_lookup_reg(a,b)
     nil
   end
   

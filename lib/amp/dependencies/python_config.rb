@@ -183,6 +183,8 @@ module PythonConfig
         result = str.to_f
       elsif type == Array
         result = str.split(",").map {|s| s.strip}
+      elsif type == String
+        result = str
       end
       return result if args.size == 2
       
