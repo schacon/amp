@@ -94,9 +94,9 @@ command :status do |c|
           end
           
         end
+        
         Amp::UI.say
         Amp::UI.say "#{status[:delta]} bytes were changed"
-        Amp::UI.say
       end
     end
     
