@@ -7,13 +7,13 @@ command :outgoing do |c|
   c.opt :"no-merges", "Don't show merges"
   c.desc "Prints the list of all changesets that can be pushed"
   c.help <<-HELP
-show changesets not found in destination
-
-Show changesets not found in the specified destination repository or
-the default push location. These are the changesets that would be pushed
-if a push was requested.
-
-See pull for valid destination format details.
+  show changesets not found in destination
+  
+  Show changesets not found in the specified destination repository or
+  the default push location. These are the changesets that would be pushed
+  if a push was requested.
+  
+  See pull for valid destination format details.
 HELP
 
   c.on_run do |opts, args|

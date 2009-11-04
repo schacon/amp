@@ -5,17 +5,17 @@ command :add do |c|
   c.opt :exclude, "exclude names matching the given patterns", :short => "-X", :type => :string
   c.opt :"dry-run", "Doesn't actually add files - just shows output", :short => "-n"
   c.help <<-HELP
-amp add [FILE]+ [opts]
-
-add the specified files on the next commit
-This command:
-
-    * Schedules files to be version controlled and added to the repository.
-
-    * The files will be added to the repository at the next commit. To
-      undo an add before that, see [amp revert].
-
-    If no names are given, all files are added to the repository.
+  amp add [FILE]+ [opts]
+  
+  add the specified files on the next commit
+  This command:
+  
+      * Schedules files to be version controlled and added to the repository.
+  
+      * The files will be added to the repository at the next commit. To
+        undo an add before that, see [amp revert].
+  
+      If no names are given, all files are added to the repository.
 HELP
   
   c.on_run do |opts, args|

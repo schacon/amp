@@ -29,6 +29,7 @@ module Amp
         opt :testing,         "Running a test. Not for users to use"
         stop_on_unknown
       end
+      global_opts = global_opts.first # we don't need the parser here
       
       # This loads the built-in ruby profiler - it's extremely slow. Use with care.
       if global_opts[:profile]

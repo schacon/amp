@@ -7,23 +7,23 @@ command :clone do |c|
   c.opt :"no-update", "Don't do an update after cloning, leaving the directory, if local, empty"
   
   c.help <<-HELP
-#{$0} clone [options]+ src dest
-
-Make a copy of an existing repository.
-
-Create a copy of an existing repository in a new directory.  The
-source and destination are URLs, as passed to the repository
-function.  Returns a pair of repository objects, the source and
-newly created destination.
-
-The location of the source is added to the new repository's
-.hg/hgrc file, as the default to be used for future pulls and
-pushes.
-
-If an exception is raised, the partly cloned/updated destination
-repository will be deleted.
-
-Where options are:
+  #{$0} clone [options]+ src dest
+  
+  Make a copy of an existing repository.
+  
+  Create a copy of an existing repository in a new directory.  The
+  source and destination are URLs, as passed to the repository
+  function.  Returns a pair of repository objects, the source and
+  newly created destination.
+  
+  The location of the source is added to the new repository's
+  .hg/hgrc file, as the default to be used for future pulls and
+  pushes.
+  
+  If an exception is raised, the partly cloned/updated destination
+  repository will be deleted.
+  
+  Where options are:
 HELP
   
   c.on_run do |opts, args|

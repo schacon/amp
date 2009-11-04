@@ -10,27 +10,27 @@ command :pull do |c|
   
   c.desc "pull changes from the specified source"
   c.help <<-HELP
-amp pull [-u] [-f] [-r REV]... [-e CMD] [--remotecmd CMD] [SOURCE]
-
-Pull changes from a remote repository to a local one.
-
-This finds all changes from the repository at the specified path
-or URL and adds them to the local repository. By default, this
-does not update the copy of the project in the working directory.
-
-Valid URLs are of the form:
-
-  local/filesystem/path (or file://local/filesystem/path)
-  http://[user[:pass]@]host[:port]/[path]
-  https://[user[:pass]@]host[:port]/[path]
-  ssh://[user[:pass]@]host[:port]/[path]
-
-Paths in the local filesystem can either point to Mercurial
-repositories or to bundle files (as created by 'amp bundle' or
-'amp incoming --bundle').
-
-An optional identifier after # indicates a particular branch, tag,
-or changeset to pull.
+  amp pull [-u] [-f] [-r REV]... [-e CMD] [--remotecmd CMD] [SOURCE]
+  
+  Pull changes from a remote repository to a local one.
+  
+  This finds all changes from the repository at the specified path
+  or URL and adds them to the local repository. By default, this
+  does not update the copy of the project in the working directory.
+  
+  Valid URLs are of the form:
+  
+    local/filesystem/path (or file://local/filesystem/path)
+    http://[user[:pass]@]host[:port]/[path]
+    https://[user[:pass]@]host[:port]/[path]
+    ssh://[user[:pass]@]host[:port]/[path]
+  
+  Paths in the local filesystem can either point to Mercurial
+  repositories or to bundle files (as created by 'amp bundle' or
+  'amp incoming --bundle').
+  
+  An optional identifier after # indicates a particular branch, tag,
+  or changeset to pull.
 HELP
   
   c.on_run do |opts, args|
