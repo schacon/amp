@@ -33,7 +33,7 @@ module Amp
         symlink = (vf_local.flags + vf_other.flags).include? "l"
         
         tool, tool_path = pick_tool(repo, path, binary, symlink)
-        UI.debug("Picked tool #{tool} for #{path} (binary #{binary} symlink #{symlink})")
+        UI.status("Picked tool #{tool} for #{path} (binary #{binary} symlink #{symlink})")
         
         unless tool
           tool = "internal:local"
@@ -94,7 +94,7 @@ module Amp
             out, a = a, back # read input from backup, write to original
           end
           replace = {"local" => a, "base" => b, "other" => c, "output" => out}
-          args.gsub!(/\$(local|base|other|output)/) {|match| replace[match]}
+          args.gsub!(/\$(local|base|other|output)/) { replace[$1]}
           # shelling out
           ret = Amp::Support::system(tool_path+" "+args, :chdir => repo.root, :environ => environment)
         end
@@ -188,7 +188,7 @@ module Amp
       #   :path => the path to the tool (if an executable is to be used)
       def pick_tool(repo, path, binary, symlink)
         hgmerge = ENV["HGMERGE"]
-        return {:name => hgmerge, :path => hgmerge} if hgmerge
+				return [hgmerge, hgmerge] if hgmerge
         
         # @todo: add merge-patterns support
         
