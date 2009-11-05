@@ -666,7 +666,7 @@ module Trollop
       vals = @p.parse args
       args.clear
       @p.leftovers.each { |l| args << l }
-      vals
+      [vals, @p]
     rescue CommandlineError => e
       $stderr.puts "Error: #{e.message}."
       $stderr.puts "Try --help for help."

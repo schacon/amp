@@ -975,14 +975,16 @@ module Amp
       backup_dir = Dir.pwd # in case something goes wrong
       temp_environ, temp_path = opts.delete(:environ), opts.delete(:chdir) || backup_dir
       
-      old_env = ENV.to_hash if temp_environ
-      temp_environ.each {|k, v| ENV[k] = v.to_s}
-      temp_environ["HG"] = $amp_executable || File.amp_find_executable("amp")
+	  	if (temp_environ)
+     	 	old_env = ENV.to_hash
+      	temp_environ["HG"] = $amp_executable || File.amp_find_executable("amp")
+      	temp_environ.each {|k, v| ENV[k] = v.to_s}
+	  	end
       Dir.chdir(temp_path) do
-        rc = system(command)
+        rc = Kernel::system(command)
       end
     ensure
-      ENV.clear.update(old_env)
+      ENV.clear.update(old_env) if temp_environ
       Dir.chdir(backup_dir)    
     end
     

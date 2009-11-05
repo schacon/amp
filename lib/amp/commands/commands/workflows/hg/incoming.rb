@@ -3,16 +3,16 @@ command :incoming do |c|
   c.desc "Show new changesets found in source"
 
   c.help <<-HELP
-hg incoming [-p] [-n] [-M] [-f] [-r REV]... [--bundle FILENAME] [SOURCE]
-
-Show new changesets found in the specified path/URL or the default
-pull location. These are the changesets that would be pulled if a pull
-was requested.
-
-For remote repository, using --bundle or -b avoids downloading the changesets
-twice if the incoming is followed by a pull.
-
-See pull for valid source format details.
+  amp incoming [-p] [-n] [-M] [-f] [-r REV]... [--bundle FILENAME] [SOURCE]
+  
+  Show new changesets found in the specified path/URL or the default
+  pull location. These are the changesets that would be pulled if a pull
+  was requested.
+  
+  For remote repository, using --bundle or -b avoids downloading the changesets
+  twice if the incoming is followed by a pull.
+  
+  See pull for valid source format details.
 HELP
 
   c.opt :force,          "Run even when remote repository is unrelated", :short => '-f'

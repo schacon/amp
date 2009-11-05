@@ -1,5 +1,13 @@
 # Create an anonymous module so that the extra methods in the templates aren't
 # entered into the global namespace
+# 
+# This bears explanation:
+# The `command` method operates regardless of location and communicates back to
+# command HQ (command.rb). We use some helper methods here, which are defined at
+# the bottom, and we want them to be hidden for everyone else. To do this, we wrap
+# the entire `command` method call in an anonymous module so that `command`, which
+# will operate anywhere, will work, but all extraneous data (the helper methods)
+# is lost in memory.
 Module.new do
   command :templates do |c|
     c.workflow :all

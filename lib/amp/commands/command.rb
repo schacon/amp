@@ -149,6 +149,8 @@ module Amp
     attr_accessor :description
     # The options submitted
     attr_accessor :options
+    # The Trollop parser
+    attr_accessor :parser
     
     ##
     # Creates a command in the Amp system. Simply instantiating a new
@@ -412,16 +414,18 @@ module Amp
       options = @options # hack to get around the fact that
       help    = @help    # Trollop uses instance eval
       
-      Trollop::options do
+      ret = Trollop::options do
+        banner help
+        
         # we can't use @options here because Trollop::options uses instance_eval
         # therefore we have to use a local to cheat death^H^H^H^H^Hinstance_eval
         options.each do |option|
           opt option[:name], option[:desc], option[:options]
         end
-        
-        banner help
       end
       
+      @parser = ret.pop
+      ret.first
     end
     
     def inspect
