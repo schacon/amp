@@ -53,11 +53,21 @@ module Amp
         #   includes error messages, warning counts, and so on.
         def verify
           seen = {}
+          manifest_linkrevs = Hash.new {|h,k| h[k] = []}
+          file_linkrevs = Hash.new {|h, k| h[k] = []}
           # can't use the nice #each because it assumes functioning changelog and whatnot
           Amp::UI.status("checking changelog...")
+          check_revlog(@changelog, "changelog")
           0.upto(@repository.size - 1) do |idx|
             node = @changelog.node_id_for_index idx
             check_entry(@changelog, idx, node, seen, [idx], "changelog")
+            begin
+              changelog_entry = @changelog.read(node)
+              manifest_linkrevs[changelog_entry.first] << idx
+              changelog_entry[3].each {|f| file_linkrevs[f] << idx}
+            rescue Exception => err
+              exception(idx, "unpacking changeset #{node.short_hex}:", err, "changelog")
+            end
           end
           @result
         end
@@ -83,9 +93,9 @@ module Amp
           end
           
           v0 = RevlogSupport::Support::REVLOG_VERSION_0
-          if revlog.version != v0
-            warn("#{name} uses revlog format 1. changelog uses format 0.") unless changelog.version == v0
-          elsif changelog.version == v0
+          if log.index.version != v0
+            warn("#{name} uses revlog format 1. changelog uses format 0.") if @changelog.index.version == v0
+          elsif log.index.version == v0
             warn("#{name} uses revlog format 0. that's really old.")
           end
         end
@@ -120,7 +130,7 @@ module Amp
             end
           rescue StandardError => e 
             # TODO: do real exception handling
-            error(link_rev, "error \"#{e.to_s}\" checking parents of #{node.short_hex}\n", filename)
+            exception(link_rev, "error checking parents of #{node.short_hex}: ", e, filename)
           end
           
           if seen[node]
@@ -128,6 +138,22 @@ module Amp
           end
           seen[node] = revision
           return link_rev
+        end
+        
+        ##
+        # Produce an error based on an exception. Matches mercurial's.
+        #
+        # @param [Fixnum] revision the link-revision the error is associated with
+        # @param [String, #to_s] message the message to print with the error
+        # @param [Exception] exception the exception that raised this error
+        # @param [String, #to_s] filename (nil) the name of the file with an error.
+        #     nil for changelog/manifest
+        def exception(revision, message, exception, filename)
+          if exception.kind_of?(Interrupt)
+            UI.warn("interrupted")
+            raise
+          end
+          error(revision, "#{message} #{exception}\n", filename)
         end
         
         ##

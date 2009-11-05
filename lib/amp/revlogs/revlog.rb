@@ -997,11 +997,8 @@ module Amp
       expected = 0
       expected = [0, data_end_for_index(self.size - 1)].max if self.size > 0
       
-      f = open(@data_file)
-      f.seek(0, IO::SEEK_END)
-      actual = f.tell
-      dd = actual - expected
-      f.close
+      
+      
       
       f = open(@index_file)
       f.seek(0, IO::SEEK_END)
@@ -1017,6 +1014,12 @@ module Amp
         end
         dd = 0
         di = actual - (self.size * s) - databytes
+      else
+        f = open(@data_file)
+        f.seek(0, IO::SEEK_END)
+        actual = f.tell
+        dd = actual - expected
+        f.close
       end
       
       return {:data_diff => dd, :index_diff => di}
