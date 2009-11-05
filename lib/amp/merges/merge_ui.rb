@@ -94,6 +94,7 @@ module Amp
             out, a = a, back # read input from backup, write to original
           end
           replace = {"local" => a, "base" => b, "other" => c, "output" => out}
+          p replace, args
           args.gsub!(/\$(local|base|other|output)/) {|match| replace[match]}
           # shelling out
           ret = Amp::Support::system(tool_path+" "+args, :chdir => repo.root, :environ => environment)

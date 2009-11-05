@@ -86,6 +86,7 @@ module Amp
     autoload :Stores,                  "amp/repository/store.rb"
     autoload :TagManager,              "amp/repository/tag_manager.rb"
     autoload :Updatable,               "amp/repository/updatable.rb"
+    autoload :Verification,            "amp/repository/verification.rb"
   end                                      
                                            
   module RevlogSupport                     
