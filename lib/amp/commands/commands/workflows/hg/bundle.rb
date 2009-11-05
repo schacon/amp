@@ -81,7 +81,7 @@ EOS
       
       # iterates over each file node id
       base.each do |filename, node_id|
-        has.update repo.changelog.reachable_nodes_for_node node_id
+        has.update repo.changelog.reachable_nodes_for_node(node_id)
       end
       
       visit = [rev]
