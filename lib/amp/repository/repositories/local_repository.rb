@@ -12,6 +12,7 @@ module Amp
       include Amp::Repositories::BranchManager
       include Amp::Repositories::TagManager
       include Amp::Repositories::Updatable
+      include Amp::Repositories::Verification
       
       # The config is an {AmpConfig} for this repo (and uses .hg/hgrc)
       attr_accessor :config

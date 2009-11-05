@@ -30,13 +30,15 @@ module Amp
         attr_accessor :repository
         alias_method :repo, :repository
         
+        attr_reader :changelog, :manifest
+        
         ##
         # Creates a new Verifier. The Verifier can verify a Mercurial repository.
         # 
         # @param [Repository] repo the repository this verifier will examine
         def initialize(repo)
           @repository = repo
-          @result = VerificationResult.new
+          @result = VerificationResult.new([], [])
           
           @bad_revisions = {}
           @revisions = 0
@@ -50,7 +52,14 @@ module Amp
         # @return [VerificationResult] the results of the verification, which
         #   includes error messages, warning counts, and so on.
         def verify
-          
+          seen = {}
+          # can't use the nice #each because it assumes functioning changelog and whatnot
+          Amp::UI.status("checking changelog...")
+          0.upto(@repository.size - 1) do |idx|
+            node = @changelog.node_id_for_index idx
+            check_entry(@changelog, idx, node, seen, [idx], "changelog")
+          end
+          @result
         end
         
         ##
@@ -70,7 +79,7 @@ module Amp
             error(nil, "data size off by #{size_diffs[:data_diff]} bytes", name) 
           end
           if size_diffs[:index_diff] != 0
-            error(nil, "index contains #{size_diffs[:index_diff] bytes}", name)
+            error(nil, "index contains #{size_diffs[:index_diff]} bytes", name)
           end
           
           v0 = RevlogSupport::Support::REVLOG_VERSION_0
@@ -105,7 +114,7 @@ module Amp
           
           begin
             log.parents_for_node(node).each do |parent|
-              if !seen[parent] && parent != NULL_ID
+              if !seen[parent] && parent != RevlogSupport::Node::NULL_ID
                 error(link_rev, "unknown parent #{parent.short_hex} of #{node.short_hex}", filename)
               end
             end
@@ -131,13 +140,12 @@ module Amp
         #     nil for changelog/manifest
         def error(revision, message, filename = nil)
           if revision
-            @bad_revisions[li] = true
+            @bad_revisions[revision] = true
           else
             revision = "?"
           end
           new_message = "#{revision}: #{message}"
           new_message = "#{filename}@#{new_message}" if filename
-          
           @result.errors << new_message
         end
         
@@ -153,10 +161,7 @@ module Amp
       ##
       # Simple struct that handles the results of a verification.
       class VerificationResult < Struct.new(:warnings, :errors)
-        def initialize
-          @warnings = []
-          @errors = []
-        end
+        
       end
       
     end
