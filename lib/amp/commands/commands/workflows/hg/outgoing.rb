@@ -71,6 +71,8 @@ HELP
     # trim the list if it's bigger than our limit
     o = opts[:limit] ? o[0..opts[:limit]-1] : o
     
+    Amp::UI::say # give us some space
+    
     # print each changeset using the template in templates/
     o.each do |node_id|
       # get the parents of the node so that we can check if it's a merge
@@ -81,7 +83,7 @@ HELP
       # and we're NOT printing merges (opts[:"no-merges"])
       next if opts[:"no-merges"] && parents.size == 2
       opts.merge! :template_type => :log
-      Amp::UI::say repo[node_id].to_templated_s(opts)
+      Amp::UI::tell repo[node_id].to_templated_s(opts)
     end
   end
 end
