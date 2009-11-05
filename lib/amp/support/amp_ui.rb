@@ -207,6 +207,7 @@ EOS
       end
     end
     alias_method :agree, :yes_or_no
+    
     ##
     # Opens the user's editor for the file at the given path, with no extra
     # processing afterward.
