@@ -23,6 +23,7 @@ module Amp
       attr_reader :hg_opener
       attr_reader :branch_manager
       attr_reader :store_opener
+      attr_reader :store
       
       ##
       # Initializes a new directory to the given path, and with the current

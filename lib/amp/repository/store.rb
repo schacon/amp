@@ -155,7 +155,7 @@ module Amp
         def datafiles
           do_walk('data', true) do |a, b, size|
             a = decode_filename(a) || nil
-            yield [a, b, size]
+            yield [a, b, size] if block_given?
           end
         end
         
@@ -304,12 +304,14 @@ module Amp
           existing = []
           pjoin = @path_joiner
           spath = @path
+          result = []
           FilenameCache.parse(@_op) do |f|
             
             ef = Stores.hybrid_encode f
             begin
               st = File.stat(@path_joiner.call(spath, ef))
               yield [f, ef, st.size] if block_given?
+              result << [f, ef, st.size] unless block_given?
               existing << f
             rescue Errno::ENOENT
               rewrite = true
@@ -322,6 +324,7 @@ module Amp
             end
             fp.close
           end
+          result
         end
         
         ##

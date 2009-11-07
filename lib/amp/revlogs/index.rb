@@ -455,7 +455,7 @@ module Amp
               # add it to the index
               @index << entry
               n += 1
-              break if entry.compressed_len <= 0
+              break if entry.compressed_len < 0
               
               # skip past the data, too!
               f.seek(entry.compressed_len, IO::SEEK_CUR)

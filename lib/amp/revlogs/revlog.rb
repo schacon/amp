@@ -137,6 +137,16 @@ module Amp
     end
     
     ##
+    # Returns the uncompressed size of the data for the revision at _index_.
+    def uncompressed_size_for_index(index)
+      len = self[index].uncompressed_len
+      return len if len >= 0
+      
+      text = decompress_revision(node_id_for_index index)
+      return text.size
+    end
+    
+    ##
     # Returns the offset where the data begins for the revision at _index_.
     def data_start_for_index(index)
       RevlogSupport::Support.get_offset self[index].offset_flags
@@ -995,7 +1005,7 @@ module Amp
     # Returns the differences between expected and actual sizes.
     def checksize
       expected = 0
-      expected = [0, data_end_for_index(self.size - 1)].max if self.size > 0
+      expected = [0, data_end_for_index(self.index_size - 1)].max if self.index_size > 0
       
       
       
@@ -1009,11 +1019,11 @@ module Amp
       
       if @index.inline?
         databytes = 0
-        self.size.times do |r|
+        self.index_size.times do |r|
           databytes += [0, self[r].compressed_len].max
         end
         dd = 0
-        di = actual - (self.size * s) - databytes
+        di = actual - (self.index_size * s) - databytes
       else
         f = open(@data_file)
         f.seek(0, IO::SEEK_END)
