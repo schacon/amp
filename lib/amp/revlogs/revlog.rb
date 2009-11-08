@@ -142,7 +142,7 @@ module Amp
       len = self[index].uncompressed_len
       return len if len >= 0
       
-      text = decompress_revision(node_id_for_index index)
+      text = decompress_revision node_id_for_index(index)
       return text.size
     end
     
