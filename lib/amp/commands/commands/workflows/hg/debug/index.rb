@@ -2,7 +2,9 @@ namespace :debug do
   
   command :index do |c|
     c.workflow :hg
+    
     c.desc "Dumps the index of an index file"
+    
     c.on_run do |opts, args|
       opener = Amp::Opener.new(Dir.pwd)
       opener.default = :open_file

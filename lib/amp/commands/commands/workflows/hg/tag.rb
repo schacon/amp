@@ -1,5 +1,7 @@
 command :tag do |c|
   c.workflow :hg
+  
+  c.desc "Tags a revision with a given tag name"
   c.opt :rev, "Specifies which revision to tag", :short => "-r", :type => :string
   c.opt :message, "Specifies the commit message", :short => "-m", :type => :string
   c.opt :local, "Marks the tag as local only (not shared among repositories)", :short => "-l"
@@ -7,7 +9,7 @@ command :tag do |c|
   c.opt :force, "Forces the tag to be applied, ignoring existing tags", :short => "-f"
   c.opt :user, "Specifies which user to commit under", :short => "-u", :type => :string
   c.opt :date, "Specifies which date to use", :short => "-d", :type => :string
-  c.desc "Tags a revision with a given tag name"
+  
   c.on_run do |opts, args|
     repo = opts[:repository]
     

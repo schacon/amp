@@ -4,6 +4,7 @@ command :push do |c|
   c.opt :remote, "The remote repository's URL", :short => "-R"
   c.opt :revs, "The revisions to push", :short => "-r", :type => :string
   c.opt :force, "Ignore remote heads", :short => "-f"
+  
   c.on_run do |opts, args|
     repo = opts[:repository]
     dest = opts[:remote] || repo.config["paths","default-push"] || repo.config["paths","default"]

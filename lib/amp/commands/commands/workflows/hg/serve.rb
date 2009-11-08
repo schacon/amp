@@ -1,5 +1,7 @@
 command :serve do |c|
   c.workflow :hg
+  
+  c.desc "Starts an HTTP server (with an associated website) serving the repository"
   c.opt :path,    "The path section of the URL (e.g. /repository/served/)",    :short => "-P", :type => :string
   c.opt :port,    "Which port to run the server on",                           :short => "-p", :type => :integer
   c.opt :basic,   "HTTP Basic Authentication (vs. Digest)",                    :short => "-b", :default => false
@@ -7,7 +9,7 @@ command :serve do |c|
   c.opt :storage, "Store the users in [TYPE] manner. Can be 'sequel' or 'memory'", :short => "-s", :type => :string,
                                                                                :default => 'memory'
   c.opt :users,   "File from which to read the users (YAML format)",           :short => '-u', :type => :string
-  c.desc "Starts an HTTP server (with an associated website) serving the repository"
+  
   c.on_run do |opts, args|
     repo = opts[:repository]
     http_path = opts[:path] || "/"

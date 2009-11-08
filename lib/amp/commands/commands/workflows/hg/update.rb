@@ -1,9 +1,11 @@
 command :update do |c|
   c.workflow :hg
+  
+  c.desc "Updates the current repository to the specified (or tip-most) revision"
   c.opt :rev, "The revision # to use for updating.", { :short => "-r", :type => :string }
   c.opt :node, "The node ID to use for updating.", { :short => "-n", :type => :string }
   c.opt :clean, "Remove uncommitted changes from the working directory.", { :short => "-C" }
-  c.desc "Updates the current repository to the specified (or tip-most) revision"
+  
   c.on_run do |opts, args|
     repo = opts[:repository]
     

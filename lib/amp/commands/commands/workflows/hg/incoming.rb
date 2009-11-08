@@ -3,7 +3,7 @@ command :incoming do |c|
   c.desc "Show new changesets found in source"
 
   c.help <<-HELP
-  amp incoming [-p] [-n] [-M] [-f] [-r REV]... [--bundle FILENAME] [SOURCE]
+amp incoming [options]+ source
   
   Show new changesets found in the specified path/URL or the default
   pull location. These are the changesets that would be pulled if a pull

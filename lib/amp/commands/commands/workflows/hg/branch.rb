@@ -1,8 +1,10 @@
 command :branch do |c|
   c.workflow :hg
+  
   c.desc "Set/Show the current branch name"
   c.opt :force, "Forces the branch-name change", :short => "-f"
   c.opt :clean, "Resets the branch setting for this repository", :short => "-c"
+  
   c.on_run do |opts, args|
     repo = opts[:repository]
     if opts[:clean]

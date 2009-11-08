@@ -1,12 +1,13 @@
 command :add do |c|
   c.workflow :hg
+  
   c.desc "Add a file to the repository (it will be tracked from here on)"
   c.opt :include, "include names matching the given patterns", :short => "-I", :type => :string
   c.opt :exclude, "exclude names matching the given patterns", :short => "-X", :type => :string
   c.opt :"dry-run", "Doesn't actually add files - just shows output", :short => "-n"
   c.help <<-HELP
-  amp add [FILE]+ [opts]
-  
+amp add [FILE]+ [options]
+
   add the specified files on the next commit
   This command:
   
@@ -16,6 +17,8 @@ command :add do |c|
         undo an add before that, see [amp revert].
   
       If no names are given, all files are added to the repository.
+    
+  Where options are:
 HELP
   
   c.on_run do |opts, args|

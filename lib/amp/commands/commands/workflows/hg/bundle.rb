@@ -3,6 +3,8 @@ command :bundle do |c|
   
   c.desc "Create a changegroup file"
   c.help <<-EOS
+amp [options]+ file dest
+
   Generate a compressed changegroup file collecting changesets not
   known to be in another repository.
   
@@ -19,6 +21,8 @@ command :bundle do |c|
   
   Applying bundles preserves all changeset contents including
   permissions, copy/rename information, and revision history.
+  
+  Options are:
 EOS
 
   c.opt :force, "Run even when remote repository is unrelated",     :short => '-f'

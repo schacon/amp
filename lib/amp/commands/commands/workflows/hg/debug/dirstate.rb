@@ -1,8 +1,10 @@
 namespace :debug do
   command :dirstate do |c|
     c.workflow :hg
+    
     c.desc "Shows the current state of the working directory, as amp sees it."
     c.opt :"no-dates", "Do not show modification dates", :short => "-D"
+    
     c.on_run do |opts, args|
       repo = opts[:repository]
       showdates = !opts[:"no-dates"]

@@ -1,7 +1,9 @@
 command "tags" do |c|
   c.workflow :hg
-  c.opt :quiet, "Prints only tag names", :short => "-q"
+  
   c.desc "Lists the repository tags."
+  c.opt :quiet, "Prints only tag names", :short => "-q"
+  
   c.on_run do |opts, args|
     repo = opts[:repository]
     list = repo.tag_list

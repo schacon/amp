@@ -207,17 +207,19 @@ module Kernel
   #
   # @yield The block is run, and any exceptions raised print their full backtrace.
   def full_backtrace_please
+    message = ["***** Left engine failure *****",
+               "***** Ejection system error *****",
+               "***** Vaccuum in booster engine *****"
+              ][rand(3)]
     begin
       yield
     rescue AbortError => e
       puts "caught a AbortError - debuggers beware!"
       raise
     rescue StandardError => e
-      puts "***** Left engine failure *****"
+      puts message
       puts e.to_s
-      e.backtrace.each do |err|
-        puts "\tfrom #{err}"
-      end
+      e.backtrace.each {|err| puts "\tfrom #{err}" }
       exit
     end
   end
@@ -226,6 +228,7 @@ end
 
 class Dir
 
+  ##
   # Iterates over a directory, yielding an array with the
   # {File::Stat} entry for each file/directory in the requested directory.
   # @param [String] path the path to iterate over

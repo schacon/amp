@@ -7,7 +7,7 @@ command :clone do |c|
   c.opt :"no-update", "Don't do an update after cloning, leaving the directory, if local, empty"
   
   c.help <<-HELP
-  #{$0} clone [options]+ src dest
+amp clone [options]+ src dest
   
   Make a copy of an existing repository.
   

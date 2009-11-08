@@ -12,11 +12,27 @@
 # my entire repository. It's off by default.
 command :addremove do |c|
   c.workflow :hg
+  
+  c.desc "Add all new files, delete all missing files"
   c.opt :interactive, "Asks about each file before adding/removing", :default => false, :short => "-a"
   c.opt :include, "include names matching the given patterns", :type => :string, :short => "-I"
   c.opt :exclude, "exclude names matching the given patterns", :type => :string, :short => "-E"
   c.opt :"dry-run", "Don't perform actions, just print output", :short => "-n"
-  c.desc "Adds untracked files and removes those that have been deleted"
+  c.help <<-EOS
+amp addremove [options]+
+
+  New files are ignored if they match any of the patterns in .hgignore. As
+  with add, these changes take effect at the next commit.
+
+  Use the -s option to detect renamed files. With a parameter > 0,
+  this compares every removed file with every added file and records
+  those similar enough as renames. This option takes a percentage
+  between 0 (disabled) and 100 (files must be identical) as its
+  parameter. Detecting renamed files this way can be expensive.
+  
+  Where options are:
+EOS
+
   c.on_run do |opts, args|
     repo = opts[:repository]
     
