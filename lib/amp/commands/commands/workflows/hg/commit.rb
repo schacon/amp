@@ -1,5 +1,6 @@
 command :commit do |c|
   c.workflow :hg
+  
   c.desc "Commit yo shit"
   c.opt :force, "Forces files to be committed", :short => "-f"
   c.opt :include, "Includes the given patterns", :short => "-I", :type => :string
@@ -8,6 +9,25 @@ command :commit do |c|
   c.opt :user,    "The user committing the revision", :short => "-u", :type => :string
   c.opt :date,    "The date of the commit", :short => "-d", :type => :string
   c.synonym :ci
+  c.help <<-EOS
+amp commit [options]+ [FILE]+
+
+  Commit changes to the given files into the repository.
+
+  If a list of files is omitted, all changes reported by "amp status"
+  will be committed.
+
+  If you are committing the result of a merge, do not provide any
+  file names or -I/-X filters.
+
+  If no commit message is specified, the configured editor is started to
+  prompt you for a message.
+  
+  amp commit [FILE]+ [options]
+  
+  Where options are:
+EOS
+  
   c.on_run do |opts, args|
     repo = opts[:repository]
     

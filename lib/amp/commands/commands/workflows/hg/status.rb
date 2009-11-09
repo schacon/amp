@@ -1,5 +1,6 @@
 command :status do |c|
   c.workflow :hg
+  
   c.desc "Prints the status of the working directory (or another revision)"
   c.opt :all,       "Show all files", {:short => "-A"}
   c.opt :modified,  "Show only modified files", {:short => "-m"}

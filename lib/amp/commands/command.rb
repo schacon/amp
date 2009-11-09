@@ -185,7 +185,6 @@ module Amp
       
       @name                = name
       @help                = ""
-      @description         = ""
       @options             = []
       self.class.all_commands[name] = self
       @before = []
@@ -332,26 +331,16 @@ module Amp
     end
     
     ##
-    # Sets the short description for the command. This shouuld be only 1 line,
-    # as it's what the user sees when they run `amp --help` and get the 
-    # full list of commands. `str` defaults to nil so that if no argument is
-    # passed, by default #desc will just return `@description`. If `str` is
-    # passed a string, then it will set `@description` to `str`.
+    # The one-line description of the command. This is the first line
+    # of the help text. If no argument is passed, then the desription
+    # is returned. If an argument is passed, it will be set to be the
+    # first line of the help text.
     # 
-    # @example cmd.desc "This command is useless."
     # @example cmd.desc # => "This command is useless."
     # @param [String, nil] str the help text to set
     def desc(str=nil)
-      str ? @description = str : @description
+      str ? @help = "#{str}\n\n#{@help}" : @help.split("\n").first
     end
-    
-    ##
-    # Sets the short description for the command. This shouuld be only 1 line,
-    # as it's what the user sees when they run `amp --help` and get the 
-    # full list of commands.
-    # 
-    # @param str the help text to set
-    alias :desc= :desc
     
     ##
     # Trollop's help info for the command

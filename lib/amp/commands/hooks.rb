@@ -1,4 +1,5 @@
 module Amp
+  
   ##
   # = Hook
   # The hook class allows the end-user to easily provide hooks into the code that

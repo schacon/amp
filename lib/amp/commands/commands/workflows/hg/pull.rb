@@ -10,7 +10,7 @@ command :pull do |c|
   
   c.desc "pull changes from the specified source"
   c.help <<-HELP
-  amp pull [-u] [-f] [-r REV]... [-e CMD] [--remotecmd CMD] [SOURCE]
+amp pull [options]+ src
   
   Pull changes from a remote repository to a local one.
   

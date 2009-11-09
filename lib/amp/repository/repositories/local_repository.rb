@@ -108,6 +108,20 @@ module Amp
       end
       
       ##
+      # Has the repository been changed since the last commit?
+      # Returns true if there are NO outstanding changes or uncommitted merges.
+      # 
+      # @return [Boolean] is the repo pristine
+      def pristine?        
+        dirstate.parents.last == RevlogSupport::Node::NULL_ID &&
+        status(:only => [:modified, :added, :removed, :deleted]).all? {|_, v| v.empty? }
+      end
+      
+      ##
+      # @see pristine?
+      def changed?; !pristine?; end
+      
+      ##
       # Effectively FileUtils.pwd
       # 
       # @return [String] the current location
@@ -1995,7 +2009,7 @@ module Amp
         
         status.map {|k, v| [k, v.sort] }.to_hash # sort dem fuckers
         status[:delta] = delta
-        status
+        status.select {|k, _| opts[:only] ? opts[:only].include?(k) : true }.to_hash
       end
       
       ##

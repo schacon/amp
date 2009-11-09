@@ -75,7 +75,7 @@ module Amp
     # The revision index into the history of the repository. Could also
     # be a node_id
     def change_id
-      @change_id ||= @changeset.revision        if @changeset
+      @change_id ||= @changeset.revision         if @changeset
       @change_id ||= file_log[file_rev].link_rev unless @changeset
       @change_id
     end
@@ -355,9 +355,9 @@ module Amp
   # is stored on disk in the actual file. Other than that, it's basically the
   # same in its interface!
   class VersionedWorkingFile < VersionedFile
+    
     ##
     # Initializes a new working dir file - slightly different semantics here
-    #
     def initialize(repo, path, opts={})
       @repo, @path = repo, path
       @change_id = nil
@@ -375,14 +375,12 @@ module Amp
     
     ##
     # Dunno why this is here
-    #
     def repo_path
       @repo.dirstate.copy_map[@path] || @path
     end
     
     ##
     # Gets the file log?
-    #
     def file_log
       @repo.file(repo_path)
     end
@@ -408,7 +406,6 @@ module Amp
     
     ##
     # Get the contents of this file
-    #
     def data
       data = @repo.working_read(@path)
       data
@@ -444,7 +441,6 @@ module Amp
     
     ##
     # Working directory has no children!
-    #
     def children; []; end
     
     ##
@@ -456,7 +452,6 @@ module Amp
     
     ##
     # Returns the date that this file was last modified.
-    #
     def date
       t, tz = changeset.date
       begin

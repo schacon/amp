@@ -9,7 +9,7 @@ command :help do |c|
       output << "These are the following commands available:\n"
       
       Amp::Command.all_for_workflow(options[:global_config]["amp", "workflow"], false).sort {|k1, k2| k1.to_s <=> k2.to_s}.each do |k, v| 
-        output << "\t#{k.to_s.ljust(30, " ")}#{v.description}" + "\n"
+        output << "\t#{k.to_s.ljust(30, " ")}#{v.desc}" + "\n"
       end
       
       output << 'Run "amp help [command]" for more information.'

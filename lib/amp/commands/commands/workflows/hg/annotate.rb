@@ -1,13 +1,14 @@
 command :annotate do |c|
   c.workflow :hg
+  
   c.desc "Shows who committed each line in a given file."
-  c.synonym :blame
-  c.synonym :praise
   c.opt :rev, "Which revision to annotate", :short => "-r", :type => :integer, :default => nil
   c.opt :"line-number", "Show line number of first appearance", :short => "-l"
   c.opt :changeset, "Show the changeset ID instead of revision number", :short => "-c"
   c.opt :user, "Shows the user who committed instead of the revision", :short => "-u"
   c.opt :date, "Shows the date when the line was committed", :short => "-d"
+  c.synonyms :blame, :praise
+  
   c.on_run do |opts, args|
     repo = opts[:repository]
 

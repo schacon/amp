@@ -10,9 +10,7 @@ command :archive do |c|
   c.opt :exclude    , "Exclude names matching the given patterns", :short => '-X', :type => :string
   
   c.help <<-HELP
-#{$0} archive [options]+ dest
-
-create unversioned archive of a repository revision
+amp archive [options]+ dest
 
     By default, the revision used is the parent of the working
     directory; use "-r" to specify a different revision.
@@ -34,6 +32,7 @@ create unversioned archive of a repository revision
     prepended. Use "-p" to specify a format string for the prefix.
     The default is the basename of the archive, with suffixes removed.
 
+    Where options are:
 HELP
   c.synonyms :export, :x
   

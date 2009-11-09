@@ -6,7 +6,7 @@ command :revert do |c|
   c.opt :rev, "The revision to revert to", :short => "-r", :type => :integer
   c.opt :all, "Revert entire repository", :short => "-a"
   c.help <<-HELP
-  amp revert [OPTION]... [-r REV] [NAME]...
+amp revert [options]+ [FILE]+
   
   restore individual files or dirs to an earlier state
   

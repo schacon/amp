@@ -1,6 +1,7 @@
 command :branches do |c|
   c.workflow :hg
   c.desc "Prints the current branches (active and closed)"
+  
   c.on_run do |opts, args|
     repo = opts[:repository]
 
