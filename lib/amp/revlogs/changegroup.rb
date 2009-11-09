@@ -95,6 +95,7 @@ module Amp
               ret = self.string.dup  # get the current read-in string
               self.string.replace "" # erase our contents
               self.rewind            # rewind the IO
+              self.tell
               ret                    # return the string
             end
           end
@@ -157,7 +158,6 @@ module Amp
       def self.write_bundle(changegroup, bundletype, fh = StringIO.new("", (ruby_19? ? "w+:ASCII-8BIT" : "w+")))
         # rewind the changegroup to start at the beginning
         changegroup.rewind
-        p "Changegroup size: "+changegroup.size.to_s
         # pick out our header
         header     = BUNDLE_HEADERS[bundletype]
         # get a compressing stream
@@ -178,7 +178,11 @@ module Amp
           # Add 1 to the number of files we've comrpessed
           count += 1
           # For each chunk in the changegroup (i.e. each changeset)
+          inner_count = 0
           self.each_chunk(changegroup) do |chunk|
+            
+            #puts "\t\twrite_bundle inner loop count #{inner_count}"
+            inner_count += 1
             empty = false
             # Compress the chunk header
             compressor << chunk_header(chunk.size)
@@ -190,6 +194,7 @@ module Amp
             (0..chunk.size).step(step_amt) do |pos|
               compressor << chunk[pos..(pos+step_amt-1)]
               fh.write(compressor.flush)
+              fh.flush
             end
           end
           # Compress the terminating chunk - this indicates that there are no more changesets
@@ -197,6 +202,7 @@ module Amp
           compressor << closing_chunk
           # Write the terminating chunk out!
           fh.write compressor.flush
+          fh.flush
         end
         
         # Write anything left over in that there compressor

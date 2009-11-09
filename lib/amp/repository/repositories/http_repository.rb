@@ -156,8 +156,6 @@ module Amp
       # @return [StringIO] the uncompressed changegroup subset as a stream.
       def changegroup_subset(bases, heads, source)
         #require_capability 'changegroupsubset', 'look up remote changes'
-        p bases
-        p heads
         base_list = bases.map {|n| n.hexlify }.join ' '
         head_list = heads.map {|n| n.hexlify }.join ' '
 #        p base_list, head_list
