@@ -208,8 +208,8 @@ module Amp
       r = file_log.renamed(file_node)
       pl[0] = [r[0], r[1], nil] if r
       
-      pl.select {|p,n,l| n != NULL_ID}.map do |p, n, l|
-        VersionedFile.new(@repo, p, :file_id => n, :file_log => l)
+      pl.select {|parent,n,l| n != NULL_ID}.map do |parent, n, l|
+        VersionedFile.new(@repo, parent, :file_id => n, :file_log => l)
       end
     end
     
@@ -290,16 +290,16 @@ module Amp
       
       hist = {}
       lastfile = ""
-      visit.sort.each do |rev, file|
-        curr = annotate_decorate(file.data, file, line_number)
-        annotate_parents_helper(file).each do |p|
+      visit.sort.each do |rev, file_ann|
+        curr = annotate_decorate(file_ann.data, file_ann, line_number)
+        annotate_parents_helper(file_ann).each do |p|
           next if p.file_id == NULL_ID
           curr = annotate_diff_pair(hist[p.path + p.file_id.to_s], curr)
           counters[p.path + p.file_id.to_s] -= 1
           hist.delete(p.path + p.file_id.to_s) if counters[p.path + p.file_id.to_s] == 0
         end
-        hist[file.path+file.file_id.to_s] = curr
-        lastfile = file
+        hist[file_ann.path+file_ann.file_id.to_s] = curr
+        lastfile = file_ann
       end
       returnarr = []
       hist[lastfile.path+lastfile.file_id.to_s].inspect # force all lazy-loading to stoppeth
@@ -437,8 +437,8 @@ module Amp
         end
         pl << [p, pcl[1].manifest[p] || NULL_ID, fl]
       end
-      pl.select {|p, n, l| n != NULL_ID}.map do |p, n, l|
-        VersionedFile.new(@repo, p, :file_id => n, :file_log => l)
+      pl.select {|_, n, __| n != NULL_ID}.map do |parent, n, l|
+        VersionedFile.new(@repo, parent, :file_id => n, :file_log => l)
       end
     end
     

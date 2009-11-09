@@ -283,7 +283,7 @@ module Amp
         end
       end
       
-      missing.keys.sort.map {|r| node_id_for_index r}
+      missing.keys.sort.map {|rev| node_id_for_index rev}
     end
     
     ##
@@ -380,12 +380,12 @@ module Amp
           # include roots that aren't ancestors.
 
           # Filter out roots that aren't ancestors of heads
-          roots = roots.select {|r| ancestors.include? r}
+          roots = roots.select {|rev| ancestors.include? rev}
           
           return no_nodes if roots.empty? # No more roots?  Return empty list
           
           # Recompute the lowest revision
-          lowest_rev = roots.map {|r| revision_index_for_node r}.min
+          lowest_rev = roots.map {|rev| revision_index_for_node rev}.min
         else
           lowest_rev = NULL_REV
           roots = [NULL_ID]
@@ -406,8 +406,8 @@ module Amp
       # Don't start at nullid since we don't want nullid in our output list,
       # and if nullid shows up in descedents, empty parents will look like
       # they're descendents.
-      [lowest_rev, 0].max.upto(highest_rev) do |r|
-        node = node_id_for_index r
+      [lowest_rev, 0].max.upto(highest_rev) do |rev|
+        node = node_id_for_index rev
         is_descendent = false
         
         if lowest_rev == NULL_REV # Everybody is a descendent of nullid
@@ -452,7 +452,7 @@ module Amp
             heads[node] = true
             
             # But, obviously its parents aren't.
-            parents_for_node(node).each {|par| heads.delete p }
+            parents_for_node(node).each {|parent| heads.delete parent }
           end
         end
       end
@@ -979,7 +979,7 @@ module Amp
       load_index_map if @index.is_a? RevlogSupport::LazyIndex
       
       rev = 0
-      all_indices.each {|rev| break if @index[rev].link_rev >= min_link }
+      all_indices.each {|_rev| rev = _rev; break if @index[rev].link_rev >= min_link }
       return if rev > all_indices.max
       
       endpt = data_start_for_index rev

@@ -1345,6 +1345,9 @@ module Amp
         # the python doesn't name them either, which
         # means I have no clue what these are
         find_proc = proc do |item1, item2|
+          p "find proc: #{item1.inspect}"
+          p "find proc: #{item2.inspect}"
+          
           fetch[item1]       = true
           opts[:base][item2] = true
         end
@@ -1357,7 +1360,8 @@ module Amp
         count += new_count # keep keeping track of the total
         
         # sanity check, because this method is sooooo fucking long
-        fetch.keys.map do |f|
+        fetch.keys.each do |f|
+          p "fetch key: #{f.inspect}"
           if node_map.include? f
             raise RepoError.new("already have changeset #{short f[0..3]}")
           end
@@ -2535,6 +2539,7 @@ module Amp
           #puts opts[:find].inspect #killme
           
           zipped = opts[:find].zip opts[:repo].between(opts[:find])
+          p "Binary search on #{zipped.inspect}"
           zipped.each do |(n, list)|
             list << n[1]
             p = n[0]

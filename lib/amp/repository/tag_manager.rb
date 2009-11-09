@@ -49,9 +49,9 @@ module Amp
       def tags_for_node(node)
         return (@tags_for_node_cache[node] || []) if @tags_for_node_cache
         @tags_for_node_cache = {}
-        tags.each do |tag, node|
-          @tags_for_node_cache[node] ||= [] # make sure there's an array
-          @tags_for_node_cache[node] << tag # add the tag to it
+        tags.each do |tag, tag_node|
+          @tags_for_node_cache[tag_node] ||= [] # make sure there's an array
+          @tags_for_node_cache[tag_node] << tag # add the tag to it
         end
         @tags_for_node_cache[node] || []
       end
@@ -247,7 +247,6 @@ module Amp
       def read_tags(lines, fn, tag_type, global_tags, tag_types)
         # This is our tag list we'll be building.
         file_tags = {}
-        count = 0
         
         # Each line is of the format:
         # [char * 40, node ID] [tag]

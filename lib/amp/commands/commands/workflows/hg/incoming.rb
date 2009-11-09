@@ -44,6 +44,11 @@ HELP
     common, incoming, remote_heads = *repo.common_nodes(remote, :heads => url[:revs],
                                                                 :force => opts[:force])
   
+    p "common: #{common.inspect}"
+    p "incoming: #{incoming.inspect}"
+    p "remote_heads: #{remote_heads.inspect}"
+    
+  
     if incoming.empty?
       File.safe_unlink opts[:bundle]
       Amp::UI::status 'no changes found'
