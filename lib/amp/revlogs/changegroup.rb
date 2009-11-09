@@ -157,7 +157,7 @@ module Amp
       def self.write_bundle(changegroup, bundletype, fh = StringIO.new("", (ruby_19? ? "w+:ASCII-8BIT" : "w+")))
         # rewind the changegroup to start at the beginning
         changegroup.rewind
-        
+        p "Changegroup size: "+changegroup.size.to_s
         # pick out our header
         header     = BUNDLE_HEADERS[bundletype]
         # get a compressing stream

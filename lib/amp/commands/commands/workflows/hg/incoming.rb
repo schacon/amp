@@ -43,10 +43,6 @@ HELP
     url[:revs] = url[:revs].map {|r| remote.lookup r } if url[:revs] && url[:revs].any?
     common, incoming, remote_heads = *repo.common_nodes(remote, :heads => url[:revs],
                                                                 :force => opts[:force])
-  
-    p "common: #{common.inspect}"
-    p "incoming: #{incoming.inspect}"
-    p "remote_heads: #{remote_heads.inspect}"
     
   
     if incoming.empty?
@@ -67,7 +63,7 @@ HELP
            else
              remote.changegroup_subset incoming, url[:revs], 'incoming'
            end
-    
+      
       bundle_type = (remote.local? && "HG10GZ") || "HG10UN" # ???
       require 'tempfile'
       file = Tempfile.new("hg-incoming-bundle", Dir.pwd)
