@@ -9,7 +9,7 @@ conftest.c: In function ‘t’:
 conftest.c:3: error: ‘BZ2_bzWriteOpen’ undeclared (first use in this function)
 conftest.c:3: error: (Each undeclared identifier is reported only once
 conftest.c:3: error: for each function it appears in.)
-lipo: can't figure out the architecture type of: /var/folders/zy/zyqc-SWsGjeyuLdp+7qPO++++TI/-Tmp-//cc75oHHA.out
+lipo: can't figure out the architecture type of: /var/folders/zy/zyqc-SWsGjeyuLdp+7qPO++++TI/-Tmp-//cc5Bzahn.out
 checked program was:
 /* begin */
 1: /*top*/
