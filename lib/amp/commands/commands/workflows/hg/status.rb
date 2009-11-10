@@ -76,7 +76,6 @@ command :status do |c|
         end
       else
         # print it our way
-        
         show.each do |state|
           next if status[state.to_sym].empty?
           num_of_files = status[state.to_sym].size
@@ -97,7 +96,7 @@ command :status do |c|
         end
         
         Amp::UI.say
-        Amp::UI.say "#{status[:delta]} bytes were changed"
+        Amp::UI.say "#{status[:delta]} bytes were changed" if status[:delta]
       end
     end
     

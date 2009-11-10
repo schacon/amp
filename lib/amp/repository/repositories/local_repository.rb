@@ -1922,6 +1922,7 @@ module Amp
       #   (local to the root) that are under each key.
       def status(opts={:node_1 => '.'})
         run_hook :status
+        
         node1, node2, match = opts[:node_1], opts[:node_2], opts[:match]
         
         match = Match.create({}) { true } unless match
@@ -1938,19 +1939,23 @@ module Amp
         # load the working directory's manifest
         node2.manifest if !working && node2.revision < node1.revision
         
-        # get the dirstate's latest status
-        status = dirstate.status(opts[:ignored], opts[:clean], opts[:unknown], match)
-        
-        # this case is run about 99% of the time
-        # do we need to do hashes on any files to see if they've changed?
-        if working && parent_working && status[:lookup].any?
-          # lookup.any? is a shortcut for !lookup.empty?
-          clean, modified, write_dirstate = *fix_files(status[:lookup], node1, node2)
+        if working
+          # get the dirstate's latest status
+          status = dirstate.status(opts[:ignored], opts[:clean], opts[:unknown], match)
           
-          status[:clean]    += clean
-          status[:modified] += modified
+          # this case is run about 99% of the time
+          # do we need to do hashes on any files to see if they've changed?
+          if parent_working && status[:lookup].any?
+            # lookup.any? is a shortcut for !lookup.empty?
+            clean, modified, write_dirstate = *fix_files(status[:lookup], node1, node2)
+            
+            status[:clean]    += clean
+            status[:modified] += modified
+          end
+        else
+          status = {:clean => [], :modified => [], :lookup => [], :unknown => [], :ignored => [],
+                    :removed => [], :added => [], :deleted => []}
         end
-        
         # if we're working with old revisions...
         unless parent_working
           # get the older revision manifest
