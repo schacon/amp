@@ -17,8 +17,8 @@ module Amp
       # you will be changing the default options!
       DEFAULT_OPTIONS = {:context => 3, :text => false, :show_func => false,
                          :git => false, :no_dates => false, :ignore_ws => false,
-                         :ignore_ws_amount => false, :ignore_blank_lines => false
-                         }
+                         :ignore_ws_amount => false, :ignore_blank_lines => false,
+                         :pretty => false}
       
       ##
       # Clear up whitespace in the text if we have any options relating
@@ -192,8 +192,12 @@ module Amp
         end
         
         # yield the header
-        yield "@@ -%d,%d +%d,%d @@%s\n" % [astart + 1, alen,
-                                           bstart + 1, blen, func]
+        if options[:pretty]
+          yield "From original lines #{astart + 1}-#{alen+astart+1}\n".yellow
+        else
+          yield "@@ -%d,%d +%d,%d @@%s\n" % [astart + 1, alen,
+                                            bstart + 1, blen, func]
+        end
                                            
         # then yield each line of changes
         delta.each {|x| yield x}
@@ -261,8 +265,8 @@ module Amp
           end
           
           hunk[:delta] += l1[astart..(a1-1)].map {|x| ' ' + x } if a1 > 0
-          hunk[:delta] += old.map  {|x| '-' + x }
-          hunk[:delta] += newb.map {|x| '+' + x } 
+          hunk[:delta] += old.map  {|x| opts[:pretty] ? ('-' + x.chomp).red+"\n" : "-#{x}" }
+          hunk[:delta] += newb.map {|x| opts[:pretty] ? ('+' + x.chomp).green+"\n" : "+#{x}" } 
 
         end
         saved_delta += delta

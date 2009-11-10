@@ -20,7 +20,9 @@ command :diff do |c|
       path_old, path_new = vf_old.path, vf_new.path || "/dev/null"
       rev_old, rev_new   = vf_old.file_rev, vf_new.file_rev
       
-      diff = vf_new.file_log.unified_revision_diff(rev_old, date_old, rev_new, date_new, path_old, path_new)
+      diff = vf_new.file_log.unified_revision_diff rev_old, date_old, rev_new, 
+                                                   date_new, path_old, path_new, 
+                                                   :pretty => opts[:pretty]
       Amp::UI::say diff
     end
     
