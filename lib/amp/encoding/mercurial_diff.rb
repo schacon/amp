@@ -45,8 +45,28 @@ module Amp
       end
       
       ##
+      # Given a line, returns a string that represents "adding that line" in a diff,
+      # based on the options.
+      #
+      # @param [String] input the input line
+      # @return [String] the output line, in a format indicating it is "added"
+      def add_line(input, options)
+        options[:pretty] ? "+#{input.chomp}".green+"\n" : "+#{input}"
+      end
+      
+      ##
+      # Given a line, returns a string that represents "removing that line" in a diff,
+      # based on the options.
+      #
+      # @param [String] input the input line
+      # @return [String] the output line, in a format indicating it is "removed"
+      def remove_line(input, options)
+        options[:pretty] ? "-#{input.chomp}".red+"\n" : "-#{input}"
+      end
+      
+      ##
       # Creates a header or something? Not sure what this is used for, no code
-      # references it.
+      # references it. I think it's for git or something. eh.
       def diff_line(revisions, a, b, options=DEFAULT_OPTIONS)
         options = DEFAULT_OPTIONS.merge options
         parts = ['diff']
@@ -104,31 +124,56 @@ module Amp
           l = ["Binary file #{fn1} has changed\n"]
         elsif a.nil? || a.empty?
           b = b.split_lines_better
-          if a.nil?
-            l1 = "--- /dev/null#{date_tag(epoch, fn1, false, options)}"
+          header = []
+          if options[:pretty]
+            l1 = a.nil? ? "Added file " : "Changed file "
+            l1 += "#{fn2} at #{date_tag(bd,fn1,true,options)}"
+            l1 = l1.cyan
+            header << l1
           else
-            l2 = "--- #{"a/" + fn1}#{date_tag(ad,fn1,true,options)}"
+            if a.nil?
+              header << "--- /dev/null#{date_tag(epoch, fn1, false, options)}"
+            else
+              header << "--- #{"a/" + fn1}#{date_tag(ad,fn1,true,options)}"
+            end
+            header << "+++ #{"b/" + fn2}#{date_tag(bd,fn1,true,options)}"
+            header << "@@ -0,0 +1,#{b.size} @@\n"
           end
-          l2 = "+++ #{"b/" + fn2}#{date_tag(bd,fn1,true,options)}"
-          l3 = "@@ -0,0 +1,#{b.size} @@\n"
-          l = [l1, l2, l3] + (b.map {|line| "+" + line})
+          l = header + (b.map {|line| add_line(line, options)})
         elsif b.nil? || b.empty?
           a = b.split_lines_better
-          l1 = "--- #{"a/" + fn1}#{date_tag(ad,fn1,true,options)}"
-          if b.nil?
-            l2 = "+++ /dev/null#{date_tag(epoch, fn1, false, options)}"
+          header = []
+          if options[:pretty]
+            l1 = b.nil? ? "Removed file " : "Changed file "
+            l1 += "#{fn2} at #{date_tag(bd,fn1,true,options)}"
+            l1 = l1.cyan
+            header << l1
           else
-            l2 = "+++ #{"b/" + fn2}#{date_tag(bd,fn1,true,options)}"
+            header << "--- #{"a/" + fn1}#{date_tag(ad,fn1,true,options)}"
+            if b.nil?
+              header << "+++ /dev/null#{date_tag(epoch, fn1, false, options)}"
+            else
+              header << "+++ #{"b/" + fn2}#{date_tag(bd,fn1,true,options)}"
+            end
+            header << "@@ -1,#{a.size} +0,0 @@\n"
           end
-          l3 = "@@ -1,#{a.size} +0,0 @@\n"
-          l = [l1, l2, l3] + (a.map {|line| "-" + line})
+          l = header + (a.map {|line| remove_line(line, options)})
         else
           al = a.split_lines_better
           bl = b.split_lines_better
           l = bunidiff(a, b, al, bl, "a/"+fn1, "b/"+fn2, options)
           return "" if l.nil? || l.empty?
-          l[0] = "#{l[0][0..-3]}#{date_tag(ad,fn1,true,options)}"
-          l[1] = "#{l[1][0..-3]}#{date_tag(bd,fn1,true,options)}"
+          if options[:pretty]
+            l.shift
+            if fn1 == fn2
+              l[0] = "Changed file #{fn1.cyan} at #{date_tag(bd,fn1,true,options).lstrip}"
+            else
+              l[0] = "Moved file from #{fn1.cyan} to #{fn2.cyan}"
+            end
+          else
+            l[0] = "#{l[0][0..-3]}#{date_tag(ad,fn1,true,options)}"
+            l[1] = "#{l[1][0..-3]}#{date_tag(bd,fn1,true,options)}"
+          end
         end
         
         l.size.times do |ln|
@@ -193,7 +238,7 @@ module Amp
         
         # yield the header
         if options[:pretty]
-          yield "From original lines #{astart + 1}-#{alen+astart+1}\n".yellow
+          yield "From original lines #{astart + 1}-#{alen+astart+1}".yellow + "\n"
         else
           yield "@@ -%d,%d +%d,%d @@%s\n" % [astart + 1, alen,
                                             bstart + 1, blen, func]
@@ -265,8 +310,8 @@ module Amp
           end
           
           hunk[:delta] += l1[astart..(a1-1)].map {|x| ' ' + x } if a1 > 0
-          hunk[:delta] += old.map  {|x| opts[:pretty] ? ('-' + x.chomp).red+"\n" : "-#{x}" }
-          hunk[:delta] += newb.map {|x| opts[:pretty] ? ('+' + x.chomp).green+"\n" : "+#{x}" } 
+          hunk[:delta] += old.map  {|x| remove_line(x, opts) }
+          hunk[:delta] += newb.map {|x| add_line(x, opts) } 
 
         end
         saved_delta += delta
