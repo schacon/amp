@@ -3,7 +3,7 @@ command :bundle do |c|
   
   c.desc "Create a changegroup file"
   c.help <<-EOS
-amp [options]+ file dest
+amp bundle [options]+ file dest
 
   Generate a compressed changegroup file collecting changesets not
   known to be in another repository.
