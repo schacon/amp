@@ -890,6 +890,12 @@ class Symbol
   def to_hg_letter
     to_hg_int.chr
   end
+  
+  def to_proc
+    proc do |arg|
+      arg.send self
+    end
+  end
 end
 
 # net_digest_auth.rb
