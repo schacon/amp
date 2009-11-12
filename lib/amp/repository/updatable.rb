@@ -28,7 +28,7 @@ module Amp
         node ||= branch_tags[working_changeset.branch]
         node = self.lookup("tip") if node.nil? && working_changeset.branch == "default"
         if node.nil?
-          raise AbortError.new("branch #{working_changeset.branch} not found")
+          raise abort("branch #{working_changeset.branch} not found")
         end
         
         overwrite = force && !branch_merge
@@ -43,34 +43,34 @@ module Amp
         ## No use starting an udpate if we can't finish!
         
         if !overwrite && parent_list.size > 1
-          raise AbortError.new("outstanding uncommitted merges")
+          raise abort("outstanding uncommitted merges")
         end
         
         if branch_merge
           if parent_ancestor == parent2
-            raise AbortError.new("can't merge with ancestor")
+            raise abort("can't merge with ancestor")
           elsif parent_ancestor == parent1
             if parent1.branch != parent2.branch
               fast_forward = true
             else
-              raise AbortError.new("nothing to merge (use 'hg update' or check"+
+              raise abort("nothing to merge (use 'hg update' or check"+
                                    " 'hg heads')")
             end
           end
           if !force && (working_changeset.files.any? || working_changeset.deleted.any?)
-            raise AbortError.new("oustanding uncommitted changes")
+            raise abort("oustanding uncommitted changes")
           end
         elsif !overwrite
           if parent_ancestor == parent1 || parent_ancestor == parent2
             # do nothing
           elsif parent1.branch == parent2.branch
             if working_changeset.files.any? || working_changeset.deleted.any?
-              raise AbortError.new("crosses branches (use 'hg merge' or "+
+              raise abort("crosses branches (use 'hg merge' or "+
                                    "'hg update -C' to discard changes)")
             end
-            raise AbortError.new("crosses branches (use 'hg merge' or 'hg update -C')")
+            raise abort("crosses branches (use 'hg merge' or 'hg update -C')")
           elsif working_changeset.files.any? || working_changeset.deleted.any?
-            raise AbortError.new("crosses named branches (use 'hg update -C'"+
+            raise abort("crosses named branches (use 'hg update -C'"+
                                  " to discard changes)")
           else
             overwrite = true
@@ -137,7 +137,7 @@ module Amp
       def check_unknown(working_changeset, target_changeset)
         working_changeset.unknown.each do |file|
           if target_changeset[file] && target_changeset[file].cmp(working_changeset[file].data())
-            raise AbortError.new("Untracked file in the working directory differs from "+
+            raise abort("Untracked file in the working directory differs from "+
                                  "a tracked file in the requested revision: #{file}")
           end
         end
@@ -156,7 +156,7 @@ module Amp
         target_changeset.each do |file|
           folded = file.downcase
           if folded_names[folded]
-            raise AbortError.new("Case-folding name collision between #{folded_names[folded]} and #{file}.")
+            raise abort("Case-folding name collision between #{folded_names[folded]} and #{file}.")
           end
           folded_names[folded] = file
         end

@@ -73,5 +73,64 @@ module Amp
       [start, stop]
     end
     
+    # returns [String, Array || nil, String]
+    def parse_url(*arr)
+      url  = arr.shift
+      revs = arr.shift || []
+      
+      unless url =~ /#/
+        hds = revs.any? ? revs : []
+        return url, hds, revs[-1]
+      end
+      
+      url, branch = url.split('#')[0..1]
+      checkout = revs[-1] || branch
+      [url, revs + [branch], checkout]
+    end
+    
+    def local_path(path)
+      case path
+      when /file:\/\/localhost\//
+        path[17..-1]
+      when /file:\/\//
+        path[8..-1]
+      when /file:/
+        path[6..-1]
+      else
+        path
+      end
+    end
+    
+    # Return repository location relative to cwd or from [paths]
+    def expand_path(*arr)
+      loc  = arr.shift
+      dflt = arr.shift # dflt = default
+    
+      return loc if loc =~ /:\/\// or File.directory?(File.join(loc, '.hg'))
+    
+      path = config['paths'][loc]
+    
+      if !path && dflt
+        path = config['paths'][dflt]
+      end
+      path || loc
+    end
+    
+    def log_message(message, logfile)
+      if message && logfile
+        raise abort('options --message and --logfile are mutually exclusive')
+      end
+      
+      if !message && logfile
+        begin
+          message = logfile == '-' ? $stdin.read : File.read(logfile)
+        rescue => e
+          raise abort("can't read commit message '#{logfile}': #{e}")
+        end
+      end
+      
+      message
+    end
+    
   end
 end

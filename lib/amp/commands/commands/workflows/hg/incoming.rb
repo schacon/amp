@@ -28,9 +28,7 @@ HELP
   c.opt :ssh,            "Specify ssh command to use",                   :short => '-e'
   c.opt :remotecmd,      "Specify hg command to run on the remote side", :short => '-c'
 
-  c.on_run do |opts, args|
-    require 'fileutils' # for File.safe_unlink
-  
+  c.on_run do |opts, args|  
     repo = opts[:repository]
     
     url = args.shift || repo.config['paths', 'default-push'] || repo.config['paths', 'default']

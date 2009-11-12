@@ -134,7 +134,7 @@ module Amp
         all_letters  = names.kind_of?(Array) ? names.join : names
         (TAG_FORBIDDEN_LETTERS.size-1).downto 0 do |i|
           if all_letters.include? TAG_FORBIDDEN_LETTERS[i, 1]
-            raise AbortError.new("#{TAG_FORBIDDEN_LETTERS[i,1]} not allowed in a tag name!")
+            raise abort("#{TAG_FORBIDDEN_LETTERS[i,1]} not allowed in a tag name!")
           end
         end
         

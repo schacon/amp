@@ -40,7 +40,7 @@ module Amp
         
         name_a = labels.shift if labels.any?
         name_b = labels.shift if labels.any?
-        raise AbortError.new("You can only specify 2 labels") if labels.any?
+        raise abort("You can only specify 2 labels") if labels.any?
         
         local_text = read_file local
         base_text  = read_file base
@@ -413,7 +413,7 @@ module Amp
         text = File.read filename
         if text.binary?
           message = "#{filename} appears to be a binary file."
-          raise AbortError.new(message) unless opts[:text]
+          raise abort(message) unless opts[:text]
           UI.warn(message) unless opts[:quiet]
         end
         text

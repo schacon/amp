@@ -1,9 +1,11 @@
 module Amp
   module Repositories
+    
     ##
     # An entry in the dirstate. Similar to IndexEntry for revlogs. Simple struct, that's
     # all.
     class DirStateEntry < Struct.new(:status, :mode, :size, :mtime)
+      
       ##
       # shortcuts!
       def removed?;     self.status == :removed; end

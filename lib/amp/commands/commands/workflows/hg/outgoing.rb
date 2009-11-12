@@ -20,37 +20,9 @@ HELP
   c.on_run do |opts, args|
     repo   = opts[:repository]
     config = repo.config
-  
-    local_path = proc do |path|
-      case path
-      when /file:\/\/localhost\//
-        path[17..-1]
-      when /file:\/\//
-        path[8..-1]
-      when /file:/
-        path[6..-1]
-      else
-        path
-      end
-    end
-  
-    # Return repository location relative to cwd or from [paths]
-    expand_path = proc do |*arr|
-      loc  = arr.shift
-      dflt = arr.shift
     
-      return loc if loc =~ /:\/\// or File.directory?(File.join(loc, '.hg'))
-    
-      path = config['paths'][loc]
-    
-      if !path && dflt
-        path = config['paths'][dflt]
-      end
-      path || loc
-    end
-  
     dest = args.shift
-    path = expand_path[ dest || 'default-push', dest || 'default' ]
+    path = c.expand_path dest || 'default-push', dest || 'default'
     url  = Amp::Support::parse_hg_url path, opts[:rev]
     # dest, revs, checkout
     if url[:revs] && url[:revs].any? # url[:revs] isn't guaranteed to be an array

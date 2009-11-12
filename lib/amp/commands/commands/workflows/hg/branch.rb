@@ -15,7 +15,7 @@ command :branch do |c|
       _label = args.first
       if !opts[:force] && repo.branch_tags.include?(_label)
         if !repo.parents.map {|p| p.branch}.include?(_label)
-          raise AbortError.new("a branch of the same name already exists!"+
+          raise abort("a branch of the same name already exists!"+
                                " (use --force to override)")
         end
       end

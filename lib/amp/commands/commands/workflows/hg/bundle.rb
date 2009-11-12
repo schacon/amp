@@ -39,36 +39,6 @@ EOS
     fname = args.shift
     dest  = args.shift
     
-    # returns [String, Array, String]
-    parse_url = lambda do |*arr|
-      url  = arr.shift
-      revs = arr.shift || []
-      
-      unless url =~ /#/
-        hds = revs.any? ? revs : []
-        return url, hds, revs[-1]
-      end
-      
-      url, branch = url.split('#')[0..1]
-      checkout = revs[-1] || branch
-      [url, revs + [branch], checkout]
-    end
-    
-    # Return repository location relative to cwd or from [paths]
-    expand_path = proc do |*arr|
-      loc  = arr.shift
-      dflt = arr.shift # dflt = default
-    
-      return loc if loc =~ /:\/\// or File.directory?(File.join(loc, '.hg'))
-    
-      path = config['paths'][loc]
-    
-      if !path && dflt
-        path = config['paths'][dflt]
-      end
-      path || loc
-    end
-    
     # Type notation!
     # rev :: Amp::Changeset
     rev  = repo.lookup rev
@@ -76,7 +46,7 @@ EOS
     
     if base
       if dest
-        raise AbortError.new("--base is incompatible with " +
+        raise abort("--base is incompatible with " +
                              "specifiying a destination")
       end
       
@@ -109,8 +79,8 @@ EOS
         end # end if
       end # end until
     else
-      path = expand_path[ dest || 'default-push', dest || 'default' ]
-      dest, revs, checkout = *parse_url[ path, [rev] ]
+      path = c.expand_path dest || 'default-push', dest || 'default'
+      dest, revs, checkout = *c.parse_url(path, [rev])
       # alio is Esperanto for "other", and it's conveniently the same length as repo
       alio = Amp::Repositories.pick nil, dest
       o = repo.find_outgoing_roots other, :force => opts[:force]
@@ -134,7 +104,7 @@ EOS
     # some error checking
     # yes, this calls Array#include, but the array is only 3 elements
     unless Amp::RevlogSupport::ChangeGroup::BUNDLE_TYPES.include? bundle_type
-      raise AbortError.new('unknown bundle type specified with --type')
+      raise abort('unknown bundle type specified with --type')
     end
     
     File.open fname, 'w' do |file|

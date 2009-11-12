@@ -178,7 +178,7 @@ module Amp
       when :password
         get_pass
       else
-        raise AbortError.new("Don't know how to convert to type #{type}")
+        raise abort("Don't know how to convert to type #{type}")
       end
     end
     

@@ -28,37 +28,8 @@ HELP
   
   c.on_run do |opts, args|
     require 'uri'
-    require 'fileutils'
     
-    # returns [String, Array || nil, String]
-    parse_url = lambda do |*arr|
-      url  = arr.shift
-      revs = arr.shift || []
-      
-      unless url =~ /#/
-        hds = revs.any? ? revs : []
-        return url, hds, revs[-1]
-      end
-      
-      url, branch = url.split('#')[0..1]
-      checkout = revs[-1] || branch
-      [url, revs + [branch], checkout]
-    end
-    
-    local_path = lambda do |path|
-      case path
-      when /file:\/\/localhost\//
-        path[17..-1]
-      when /file:\/\//
-        path[8..-1]
-      when /file:/
-        path[6..-1]
-      else
-        path
-      end
-    end
-    
-    src, rev, checkout = *parse_url[ args.shift ]             # get the source url, revisions we want, and the checkout
+    src, rev, checkout = *c.parse_url(args.shift)               # get the source url, revisions we want, and the checkout
     # puts [src, rev, checkout].inspect
     source = Amp::Repositories.pick opts[:global_config], src # make it an actual repository
     dest   = (dest = args.shift) || File.basename(src)        # get the destination URL
@@ -67,8 +38,8 @@ HELP
     
     # at this point, source is an {Amp::Repository} and dest is a {String}
     begin
-      src  = local_path[ src  ]
-      dest = local_path[ dest ]
+      src  = c.local_path src
+      dest = c.local_path dest
       copy = false
       
       raise Amp::Repositories::RepoError.new("destination #{dest} already exists") if File.exist? dest

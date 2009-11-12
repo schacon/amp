@@ -34,9 +34,16 @@ class OSError < StandardError; end
 #            ""   ( Y)           
 #                  ""       This is the AbortError. Fear it.
 # 4/20. nuff said (c'est la verite)
+# Strange. These used to be ASCII penises.
 class AbortError < StandardError
   def to_s
     "abort: "+super
+  end
+end
+
+module Kernel
+  def abort(str)
+    AbortError.new str
   end
 end
 
@@ -540,6 +547,12 @@ class Hash
   # @return [Hash] a hash with keys from +iterable+, all set to +value+
   def self.with_keys(iterable, value=true)
     iterable.inject({}) {|h, k| h.merge!(k => value) }
+  end
+  
+  ##
+  # Create a subset of +self+ with keys +keys+.
+  def pick(*keys)
+    keys.inject({}) {|h, (k, v)| h[k] = v }
   end
   
 end

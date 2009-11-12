@@ -37,7 +37,7 @@ module Amp
           # and the node ID of the corresponding revision in the changelog. In that order.
           # If we have less than 80 bytes (BUNDLED_INDEX_ENTRY_SIZE), then we're fucked.
           if chunk_size < BUNDLED_INDEX_ENTRY_SIZE
-            raise AbortError.new("invalid changegroup")
+            raise abort("invalid changegroup")
           end
           
           start      += BUNDLED_INDEX_ENTRY_SIZE
@@ -56,7 +56,7 @@ module Amp
           # at least, the interesting ones.
           [parent_1, parent_2].each do |parent|
             unless @index.has_node? parent
-              raise AbortError.new("Unknown parent: #{parent}@#{index_file}")
+              raise abort("Unknown parent: #{parent}@#{index_file}")
             end
           end
           

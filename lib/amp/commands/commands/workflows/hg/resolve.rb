@@ -15,15 +15,15 @@ command :resolve do |c|
     all, mark, unmark, list = *parse_args[ opts ]
     
     if (list && (mark || unmark)) || (mark && unmark)
-      raise AbortError.new("too many options specified")
+      raise abort("too many options specified")
     end
     
     if all && (opts[:include] || opts[:exclude] || args.any?)
-      raise AbortError.new("can't specify --all and patterns or files")
+      raise abort("can't specify --all and patterns or files")
     end
     
     if !(all || args.any? || opts[:include] || opts[:exclude] || mark || unmark || list)
-      raise AbortError.new("no files or directories specified; use --all to remerge all files")
+      raise abort("no files or directories specified; use --all to remerge all files")
     end
     
     true

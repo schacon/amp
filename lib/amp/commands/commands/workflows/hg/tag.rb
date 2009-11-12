@@ -20,15 +20,15 @@ command :tag do |c|
     
     names = args
     if names.map! {|n| n.strip}.uniq!
-      raise AbortError.new("tag names must be unique")
+      raise abort("tag names must be unique")
     end
     names.each do |n|
       if ["tip",".","null"].include? n
-        raise AbortError.new("the tag name #{n} is reserved")
+        raise abort("the tag name #{n} is reserved")
       end
     end
     if opts[:rev] && opts[:remove]
-      raise AbortError.new("--rev and --remove are incompatible")
+      raise abort("--rev and --remove are incompatible")
     end
     
     #removing a tag
@@ -36,10 +36,10 @@ command :tag do |c|
       expected_type = opts[:local] ? "local" : "global"
       names.each do |name|
         unless repo.tag_type name
-          raise AbortError.new("tag #{name} does not exist")
+          raise abort("tag #{name} does not exist")
         end
         if repo.tag_type(name) != expected_type
-          raise AbortError.new("tag #{name} is not a #{expected_type} tag")
+          raise abort("tag #{name} is not a #{expected_type} tag")
         end
       end
       rev = Amp::RevlogSupport::Node::NULL_ID
@@ -47,14 +47,14 @@ command :tag do |c|
     elsif !opts[:force]
       names.each do |name|
         if repo.tags[name]
-          raise AbortError.new("tag #{name} already exists" +
+          raise abort("tag #{name} already exists" +
                                              " (use -f to force)")
         end
       end
     end
     
     if !rev && repo.dirstate.parents[1] != Amp::RevlogSupport::Node::NULL_ID
-      raise AbortError.new("uncommited merge - please provide" +
+      raise abort("uncommited merge - please provide" +
                                          " a specific revision")
     end
     

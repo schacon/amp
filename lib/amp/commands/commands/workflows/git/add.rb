@@ -43,7 +43,7 @@ HELP
     working_changeset.walk(matcher, true).each do |file, _|
       if matcher.exact? file
         if repo.dirstate.ignore(file) && !opts[:force]
-          raise AbortError.new("Can't add the ignored file #{file}. Use --force to override")
+          raise abort("Can't add the ignored file #{file}. Use --force to override")
         end
         Amp::UI.status "adding #{file.relative_path repo.root}" if opts[:verbose]
         names << file

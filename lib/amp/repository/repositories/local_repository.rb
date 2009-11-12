@@ -528,7 +528,7 @@ module Amp
                else
                  # check for capabilities
                  unless remote.capable? 'changegroupsubset'
-                   raise AbortError.new('Partial pull cannot be done because' +
+                   raise abort('Partial pull cannot be done because' +
                                         'the other repository doesn\'t support' +
                                         'changegroupsubset')
                  end # end unless
@@ -579,7 +579,7 @@ module Amp
           # pull of the changeset group
           cor = changelog.size - 1
           unless changelog.add_group(source, cs_map, journal) || opts[:empty].any?
-            raise AbortError.new("received changelog group is empty")
+            raise abort("received changelog group is empty")
           end
           
           cnr = changelog.size - 1
@@ -605,7 +605,7 @@ module Amp
             fl = file f
             o  = fl.index_size
             unless fl.add_group source, rev_map, journal
-              raise AbortError.new('received file revlog group is empty')
+              raise abort('received file revlog group is empty')
             end
             revisions += fl.index_size - o
             files += 1
@@ -765,7 +765,7 @@ module Amp
             file_revlog = file fname
             # warning: useless comment
             if file_revlog.index_size.zero?
-              raise AbortError.new("empty or missing revlog for #{fname}")
+              raise abort("empty or missing revlog for #{fname}")
             end
             
             node_list = gen_node_list[file_revlog]
@@ -1099,7 +1099,7 @@ module Amp
           changed_files.sort.each do |fname|
             file_revlog = file(fname)
             unless file_revlog.size > 0
-              raise AbortError.new("empty or missing revlog for #{fname}")
+              raise abort("empty or missing revlog for #{fname}")
             end
             
             if msng_mnfst_set[fname]
@@ -1153,7 +1153,7 @@ module Amp
         
         # check to make sure it's logically possible
         unless rev || p2 == RevlogSupport::Node::NULL_ID
-          raise AbortError.new("uncommitted merge - please provide a specific revision")
+          raise abort("uncommitted merge - please provide a specific revision")
         end
         
         # if we have anything here, then create a matcher
@@ -2332,7 +2332,7 @@ module Amp
         
         lines = text.rstrip.split("\n").map {|r| r.rstrip}.reject {|l| l.empty?}
         if lines.empty? && opts[:use_dirstate]
-          raise AbortError.new("empty commit message")
+          raise abort("empty commit message")
         end
         text = lines.join("\n")
         

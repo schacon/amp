@@ -166,7 +166,7 @@ module Amp
       #
       # @param [String] index_file the path to the index file.
       def write_entry(index_file, journal) 
-        raise AbortError.new("Use a concrete class. Yeah, I called it a concrete class. I hate" +
+        raise abort("Use a concrete class. Yeah, I called it a concrete class. I hate" +
                              " Java too, but you tried to use an abstract class.")
       end
       

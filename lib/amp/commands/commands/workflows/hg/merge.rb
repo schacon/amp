@@ -9,14 +9,14 @@ command :merge do |c|
       branch = repo[nil].branch
       bheads = repo.branch_heads[branch]
       if bheads.size > 2
-        raise AbortError.new("branch #{branch} has #{bheads.size} - please merge " +
+        raise abort("branch #{branch} has #{bheads.size} - please merge " +
                              " with an explicit revision")
         c.break
       end
       parent = repo.dirstate.parents.first
       if bheads.size == 1
         if repo.heads.size > 1
-          raise AbortError.new("branch #{branch} has one head - please merge with " +
+          raise abort("branch #{branch} has one head - please merge with " +
                                "an explicit revision")
           c.break
         end
@@ -24,10 +24,10 @@ command :merge do |c|
         if parent != repo.lookup(repo[nil].branch)
           message = "#{message} - use \"amp update\" instead"
         end
-        raise AbortError.new(message)
+        raise abort(message)
       end
       unless bheads.include? parent
-        raise AbortError.new("working dir not at a head revision - use \"amp update\" or "+
+        raise abort("working dir not at a head revision - use \"amp update\" or "+
                              "merge with an explicit revision" + bheads.inspect)
       end
       opts[:node] = (parent == bheads.first) ? bheads.last : bheads.first

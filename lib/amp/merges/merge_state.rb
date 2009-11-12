@@ -1,5 +1,6 @@
 module Amp
   module Merges
+    
     ##
     # = MergeState
     # MergeState handles the merge/ directory in the repository, in order
@@ -11,6 +12,7 @@ module Amp
     # look up to see if a file is still dirty, and so on.
     class MergeState
       include Enumerable
+      
       ##
       # Initializes a new mergestate with the given repo, and reads in all the
       # information from merge/state.

@@ -204,7 +204,7 @@ module Amp
         
         # make sure the reponse was in an expected format (i.e. with a response code)
         unless resp_code.to_i.to_s == resp_code
-          raise AbortError.new("push failed (unexpected response): #{resp}")
+          raise abort("push failed (unexpected response): #{resp}")
         end
         
         # output any text from the server

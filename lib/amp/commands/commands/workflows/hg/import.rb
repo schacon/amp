@@ -36,6 +36,7 @@ EOS
   
   c.on_run do |opts, args|
     require 'date'
+    require 'open-uri'
     
     repo = opts[:repository]
     patches = args
@@ -44,15 +45,93 @@ EOS
     opts[:similarity] = Float(opts[:similarity] || 0)
     
     if opts[:similarity] < 0 || opts[:similarity] > 100
-      raise AbortError.new('similarity must be between 0 and 100')
+      raise abort('similarity must be between 0 and 100')
     end
     
     if opts[:exact] || !opts[:force]
-      raise AbortError.new("Outstanding changes or uncommitted merges exist") if repo.changed?
+      raise abort("Outstanding changes or uncommitted merges exist") if repo.changed?
     end
     
     d     = opts[:base]
     strip = opts[:strip]
-    
+    repo.lock_working_and_store do
+      patches.each do |patch|
+        patch_file = File.join d, patch
+        
+        if patch_file == '-'
+          Amp::UI.status 'applying patch from STDIN'
+          patch_file = $stdin
+        else
+          Amp::UI.status "applying #{patch_file}"
+          patch_file = Kernel.open patch_file # uses open-uri's version of #open
+        end
+        
+        data = Amp::Patch.extract patch_file
+        # python uses an array for this:
+        #  tmpname, message, user, date, branch, nodeid, p1, p2 = *data
+        # WRONG BITCH! We're using a hash
+        raise abort('no patch found') if data[:tmp_name].nil?
+        
+        begin
+          message = if msg = c.log_message opts[:message], opts[:log_file]
+                      msg
+                    elsif !data[:message].empty?
+                      data[:message].strip
+                    else
+                      nil
+                    end
+          Amp::UI.debug "message: #{message}"
+          
+          wp = repo.parents
+          if opts[:exact]
+            raise abort('not a mercurial patch') unless data[:node_id] && data[:p1]
+            p1 = repo.lookup data[:p1]
+            p2 = repo.lookup data[:p2] || Amp::RevlogSupport::Node::NULL_ID.hexlify
+            
+            repo.update(p1, false, true, nil).success? if p1 != wp.first.node
+            repo.dirstate.parents = [p1, p2]
+          elsif p2
+            begin
+              p1 = repo.lookup p1
+              p2 = repo.lookup p2
+              repo.dirstate.parents = [p1, p2] if p1 == wp[0].node
+            rescue Amp::RepoError
+              # Do nothing...
+            end
+          end
+          
+          if opts[:exact] || opts[:"import-branch"]
+            repo.dirstate.branch = data[:branch] || 'default'
+          end
+          
+          files = {}
+          begin
+            fuzz = Amp::Patch.patch data[:tmp_name], :strip => data[:strip],
+                                                     :cwd   => repo.root   ,
+                                                     :file  => files
+          ensure
+            files = Amp::Patch.update_dir repo, files, opts.pick(:similarity)
+          end
+          
+          unless opts[:"no-commit"]
+            n = repo.commit files, :message => message                   ,
+                                   :user    => opts[:user] || data[:user],
+                                   :date    => opts[:date] || data[:date]
+            if opts[:exact]
+              if n.hexlify != data[:node_id]
+                repo.rollback!
+                raise abort('patch is damaged or loses information')
+              end
+            end
+            
+            # Force a dirstate write so that the next transaction
+            # backups an up-do-date file.
+            repo.dirstate.write
+          end
+        ensure
+          File.safe_unlink data[:tmp_name]
+        end
+      end
+    end
   end  # end on_run
 end

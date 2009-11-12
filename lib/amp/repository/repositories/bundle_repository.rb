@@ -49,10 +49,10 @@ module Amp
         # And switch based on that header
         if !header.start_with?("HG")
           # Not even an HG file. FML. Bail
-          raise AbortError.new("#{bundle_name}: not a Mercurial bundle file")
+          raise abort("#{bundle_name}: not a Mercurial bundle file")
         elsif not header.start_with?("HG10")
           # Not a version we understand, bail
-          raise AbortError.new("#{bundle_name}: unknown bundle version")
+          raise abort("#{bundle_name}: unknown bundle version")
         elsif header == "HG10BZ" || header == "HG10GZ"
           # Compressed! We'll have to save to a new file, because this could get messy.
           temp_file = Tempfile.new("hg-bundle-hg10un", @root)
@@ -89,7 +89,7 @@ module Amp
           # uncompressed, do nothing
         else
           # We have no idae what's going on
-          raise AbortError.new("#{bundle_name}: unknown bundle compression type")
+          raise abort("#{bundle_name}: unknown bundle compression type")
         end
         # This hash stores pairs of {filename => position_in_bundle_file_of_this_file} 
         @bundle_files_positions = {}

@@ -15,7 +15,7 @@ $cl ||= false
 require "amp/support/loaders.rb"
 
 #require 'profile'
-autoload :FileUtils, 'fileutils'
+require 'fileutils'
 require 'stringio'
 
 local_start = Time.now
