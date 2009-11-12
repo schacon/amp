@@ -1,6 +1,6 @@
 command :diff do |c|
   c.desc "Shows the differences between changesets"
-  c.opt :pretty, "Makes the output pretty", :short => "-p", :default => true
+  c.opt :"no-color", "Turns off colored formatting", :short => "-c"
   c.opt :rev, "Specifies a revision for diffing.", :short => "-r", :multi => true, :type => :integer
   c.on_run do |opts, args|
     repo = opts[:repository]
@@ -22,7 +22,7 @@ command :diff do |c|
       
       diff = vf_new.file_log.unified_revision_diff rev_old, date_old, rev_new, 
                                                    date_new, path_old, path_new, 
-                                                   :pretty => opts[:pretty]
+                                                   :pretty => !opts[:"no-color"]
       Amp::UI::say diff
     end
     
