@@ -73,13 +73,11 @@ EOS
         raise abort('no patch found') if data[:tmp_name].nil?
         
         begin
-          message = if msg = c.log_message opts[:message], opts[:log_file]
+          message = if (msg = c.log_message opts[:message], opts[:log_file])
                       msg
                     elsif !data[:message].empty?
                       data[:message].strip
-                    else
-                      nil
-                    end
+                    end # defaults to nil
           Amp::UI.debug "message: #{message}"
           
           wp = repo.parents
