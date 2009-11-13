@@ -171,8 +171,8 @@ module Amp
               l[0] = "Moved file from #{fn1.cyan} to #{fn2.cyan}"
             end
           else
-            l[0] = "#{l[0][0..-3]}#{date_tag(ad,fn1,true,options)}"
-            l[1] = "#{l[1][0..-3]}#{date_tag(bd,fn1,true,options)}"
+            l[0] = "#{l[0][0 .. -3]}#{date_tag(ad,fn1,true,options)}"
+            l[1] = "#{l[1][0 .. -3]}#{date_tag(bd,fn1,true,options)}"
           end
         end
         
@@ -230,7 +230,7 @@ module Amp
           (astart - 1).downto(0) do |x|
             t = l1[x].rstrip
             if t =~ /\w/
-              func = ' ' + t[0..39]
+              func = ' ' + t[0 .. 39]
               break
             end
           end

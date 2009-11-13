@@ -190,7 +190,7 @@ module Zip
       end
       return value_when_finished if @outputBuffer.length==0 && input_finished?
       endIndex= numberOfBytes==nil ? @outputBuffer.length : numberOfBytes
-      return @outputBuffer.slice!(0...endIndex)
+      return @outputBuffer.slice!(0 ... endIndex)
     end
     
     def produce_input

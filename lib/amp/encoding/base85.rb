@@ -52,7 +52,7 @@ module Amp
         olen += 1 if olen > 0
         olen += l / 4 * 5
         
-        out[0..olen-1]
+        out[0 .. olen-1]
       end
       
       ##
@@ -67,7 +67,7 @@ module Amp
         out = []
         i = 0
         while i < text.size
-          chunk = text[i..i+4]
+          chunk = text[i .. i+4]
           acc = 0
           chunk.size.times do |j|
             acc = acc * 85 + B85dec[chunk[j].chr]
@@ -87,7 +87,7 @@ module Amp
         
         out = out.pack("N#{out.size}")
         if cl > 0
-          out = out[0..(-1 * (5-cl) - 1)]
+          out = out[0 .. (-1 * (5-cl) - 1)]
         end
         out
       end

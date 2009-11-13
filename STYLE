@@ -1,6 +1,6 @@
 The Amp Commandments:
     1. Thou shalt not useth the "for...in" syntax.
-    2. Thou shalt useth only but 80 columns, for those who useth the lord's
+    2. Thou shalt useth only but 80 columns, for those who useth the elden
        editors, vim and emacs.
     3. Thou shalt preface thine variables with _ only when thou needest,
        lest ye face judgement for this most grave sin.
@@ -23,3 +23,5 @@ The Amp Commandments:
        and thine yard information.
     10. Thou shalt make great and grand use of the yard extension. It is good.
     11. Name thine motherfucking variables motherfucking descriptively.
+	12. For thine ranges, thou shalt place but 1 space on either side of the
+		ellipses.

@@ -124,7 +124,7 @@ module Amp
       if !message && logfile
         begin
           message = logfile == '-' ? $stdin.read : File.read(logfile)
-        rescue => e
+        rescue IOError => e
           raise abort("can't read commit message '#{logfile}': #{e}")
         end
       end

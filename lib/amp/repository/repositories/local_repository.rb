@@ -1559,7 +1559,6 @@ module Amp
         #
         # unbundle assumes local user cannot lock remote repo (new ssh
         # servers, http servers).
-
         if remote_repo.capable? "unbundle"
           push_unbundle remote_repo, opts
         else

@@ -45,8 +45,8 @@ module Amp
           # Since the array byte_offsets[] contains the actual byte offsets of each line,
           # our diff is stored as [start_a_text_to_replace, end_a_text_to_replace,
           # size_of_replacement_text, replacement_text]. 
-          s = b[lb..(bm-1)].join unless lb == bm && lb == 0
-          s = ""                 if     lb == bm && lb == 0
+          s = b[lb .. (bm-1)].join unless lb == bm && lb == 0
+          s = ""                   if     lb == bm && lb == 0
           bin << [byte_offsets[la], byte_offsets[am], s.size].pack("NNN") + s if am > la || s.any?
           la = am + size
           lb = bm + size

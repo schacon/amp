@@ -2,7 +2,7 @@ module IOExtras  #:nodoc:
 
   CHUNK_SIZE = 32768
 
-  RANGE_ALL = 0..-1
+  RANGE_ALL = 0 .. -1
 
   def self.copy_stream(ostream, istream)
     s = ''
