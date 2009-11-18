@@ -79,7 +79,7 @@ EOS
         end # end if
       end # end until
     else
-      path = c.expand_path dest || 'default-push', dest || 'default'
+      path = c.expand_path dest || 'default-push', dest || 'default', repo.config
       dest, revs, checkout = *c.parse_url(path, [rev])
       # alio is Esperanto for "other", and it's conveniently the same length as repo
       alio = Amp::Repositories.pick nil, dest

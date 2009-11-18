@@ -147,8 +147,6 @@ module Amp
     attr_accessor :name
     # Short, 1-line description of the command
     attr_accessor :description
-    # The options submitted
-    attr_accessor :options
     # The Trollop parser
     attr_accessor :parser
     

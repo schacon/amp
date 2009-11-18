@@ -105,13 +105,14 @@ module Amp
     def expand_path(*arr)
       loc  = arr.shift
       dflt = arr.shift # dflt = default
+      cnfg = arr.pop   # always take the last
     
       return loc if loc =~ /:\/\// or File.directory?(File.join(loc, '.hg'))
     
-      path = config['paths'][loc]
+      path = cnfg['paths'][loc]
     
       if !path && dflt
-        path = config['paths'][dflt]
+        path = cnfg['paths'][dflt]
       end
       path || loc
     end

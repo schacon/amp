@@ -19,10 +19,9 @@ HELP
 
   c.on_run do |opts, args|
     repo   = opts[:repository]
-    config = repo.config
     
     dest = args.shift
-    path = c.expand_path dest || 'default-push', dest || 'default'
+    path = c.expand_path dest || 'default-push', dest || 'default', repo.config
     url  = Amp::Support::parse_hg_url path, opts[:rev]
     # dest, revs, checkout
     if url[:revs] && url[:revs].any? # url[:revs] isn't guaranteed to be an array
