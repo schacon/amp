@@ -98,6 +98,7 @@ module Amp
     def get_pass
       system "stty -echo"
       pass = gets.chomp
+      tell "\n"
       system "stty echo"
       pass
     end
