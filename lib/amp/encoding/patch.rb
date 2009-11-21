@@ -21,12 +21,14 @@ module Amp
       attr_accessor :lines
       
       ##
-      # does the patch exist? @todo - make this accurate
+      # does the patch exist?
       attr_accessor :exists
+      alias_method  :exists?, :exists
       
       ##
       # Is the file in the filesystem
       attr_accessor :missing
+      alias_method  :missing?, :missing
       
       ##
       # @todo - add comment
@@ -55,6 +57,12 @@ module Amp
         @opener    = opener
         @lines     = []
         @exists    = false
+        @hash      = {}
+        @dirty     = false
+        @offset    = 0
+        @rejected  = []
+        @printed   = false
+        @hunks     = 0
         
         ##
         # If the patch is in the filesystem
@@ -68,13 +76,6 @@ module Amp
         else
           UI::warn "unable to find '#{@file_name}' for patching"
         end
-        
-        @hash     = {}
-        @dirty    = false
-        @offset   = 0
-        @rejected = []
-        @printed  = false
-        @hunks    = 0
       end
       
       ##
@@ -83,17 +84,6 @@ module Amp
       def readlines!
         @opener.open @file_name do |f|
           @lines = f.readlines
-        end
-      end
-      
-      ##
-      # Write +linez+ to +fname+ as a patch.
-      # 
-      # @param [String] fname the filename to write to
-      # @param [Array<String>] linez an array of the lines to write
-      def writelines!(fname, linez)
-        @opener.open fname, 'w' do |f|
-          f.write linez.join("\n")
         end
       end
       
@@ -169,14 +159,116 @@ module Amp
         @rejects.each do |r|
           r.hunk.each do |l|
             lz << l
-            lz << "\n\ No newline at end of file\n" if l.last != "\n"
+            lz << "\n\ No newline at end of file\n" if l.last.chr != "\n"
           end
         end
         
-        write_lines fname, lz
+        write fname, lz, true
       end
       
-    end
+      ##
+      # Write +linez+ to +fname+. We won't be doing any writing if
+      # nothing has been changed, but this can be overridden with the
+      # force parameter.
+      # 
+      # @param [String] dest the filename to write to
+      # @param [Array<String>] linez an array of the lines to write
+      # @param [Boolean] force force a write
+      def write(dest=@file_name, linez=@lines, force=false)
+        return unless dirty? || force
+        
+        @opener.open dest, 'w' do |f|
+          f.write linez.join("\n")
+        end
+      end
+      
+      ##
+      # A more restrictive version of {write}
+      def write_patch
+        write @file_name, @lines, true
+      end
+      
+      ##
+      # Closing rites. Write the patch and then write the rejects.
+      def close
+        write_patch
+        write_rejects
+      end
+      
+      ##
+      # Apply the current hunk +hunk+. Also, should we reverse the hunk? Consult +reverse+.
+      # 
+      # @param
+      # @param
+      def apply(hunk, reverse)
+        unless hunk.complete?
+          raise PatchError.new("bad hunk #%d %s (%d %d %d %d)" % 
+                               [hunk.number, hunk.desc, hunk.a.size,
+                                hunk.len_a, hunk.b.size, hunk.len_b])
+        end
+        
+        @hunks += 1               # It's clear we're adding a new hunk.
+        
+        # Obey reversal rules.
+        hunk.reverse                                 if reverse
+        
+        # Does the file already exist? Better tell someone
+        UI::warn "file #{@file_name} already exists" if exists? && hunk.create_file?
+        
+        # Is this a misfit?
+        (@rejects << hunk; return -1)                if missing? || (exists? && hunk.create_file?)
+        
+        # Deal with GitHunks
+        if hunk.is_a? GitHunk
+          if hunk.remove_file?
+            File.safe_unlink @file_name
+          else
+            @lines   = hunk.new
+            @offset += hunk.new.size
+            @dirty   = true
+          end
+          
+          return 0
+        end
+        
+        # fast case first, no offsets, no fuzz
+        old = hunk.old
+        
+        # patch starts counting at 1 unless we are adding the file
+        start = hunk.start_a == 0 ? 0 : h.start_a + @offset - 1
+        
+        orig_start = start
+        if DiffHelpers::test_hunk(old, @lines, start) == 0
+          if hunk.remove_file?
+            File.safe_unlink @file_name
+          else
+            @lines[start .. (start + hunk.len_a)] = hunk.new
+            @offset += hunk.len_b - hunk.len_a
+            @dirty   = true
+          end
+          
+          return 0
+        end # end if
+      end # end def
+      
+      # Ok, We couldn't match the hunk.  Let's look for offsets and fuzz it
+      # as well as use proper punctuation for the 'let us' contraction.
+      hash_lines
+      
+      # if the hunk tried to put something at the bottom of the file
+      # then override the start line and use eof here
+      search_start = hunk[-1][0].chr != ' ' ? @lines.size : orig_start
+      
+      0.upto(2) do |fuzz_len|
+        [true, false].each do |top_only|
+          old = hunk.old fuzz_len, top_only
+          # Continue at patch.py:407
+          # ...
+          # ...
+        end
+      end # end upto
+      
+    end # end class Patch
     
     class PatchMeta
     end

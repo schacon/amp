@@ -866,7 +866,7 @@ module Amp
           has_cl_set = changelog.nodes_between(nil, known_heads)[:between]
           
           # cast to a hash for latter usage
-          has_cl_set = Hash.with_keys has_cl_list
+          has_cl_set = Hash.with_keys has_cl_set
         else
           # If there were no known heads, the recipient cannot be assumed to
           # know about any changesets.
@@ -941,7 +941,7 @@ module Amp
             c[3].each do |f|
               # This is to make sure we only have one instance of each
               # filename string for each filename
-              change_fileset[f] ||= f
+              changed_fileset[f] ||= f
             end # end each
             
             missing_mf_set[c[0]] ||= cl_node
@@ -1072,7 +1072,7 @@ module Amp
         # logically divide up the task, generate the group.
         generate_group = proc do
           changed_files = {}
-          group = changelog.group(missing_cl_list, identity, manifest_and_file_collector[changed_files])
+          group = changelog.group(missing_cl_list, identity, &manifest_and_file_collector[changed_files])
           group.each { |chunk| yield chunk }
           prune_manifests.call
           add_extra_nodes[1, msng_mnfst_set]

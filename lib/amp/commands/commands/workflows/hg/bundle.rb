@@ -46,8 +46,7 @@ EOS
     
     if base
       if dest
-        raise abort("--base is incompatible with " +
-                             "specifiying a destination")
+        raise abort("--base is incompatible with specifiying a destination")
       end
       
       o   = []
@@ -70,10 +69,12 @@ EOS
         
         # for those who are lame:
         # rents = 'rents = parents
-        rents = repo.changelog.parents(n).filter {|parental_unit| !has.include?(parental_unit) }
+        rents = repo.changelog.parents(n).select do |parental_unit|
+          !has.include?(parental_unit)
+        end
         
         if rents.empty?
-          o.shift n
+          o.unshift n
         else
           rents.each {|rent| add[ rent ] unless seen.include? rent }
         end # end if
@@ -81,9 +82,9 @@ EOS
     else
       path = c.expand_path dest || 'default-push', dest || 'default', repo.config
       dest, revs, checkout = *c.parse_url(path, [rev])
-      # alio is Esperanto for "other", and it's conveniently the same length as repo
+      # alio is Esperanto for "other"; it's conveniently the same length as repo
       alio = Amp::Repositories.pick nil, dest
-      o = repo.find_outgoing_roots other, :force => opts[:force]
+      o = repo.find_outgoing_roots alio, :force => opts[:force]
     end # end if
     
     # Oh no, bitches! If you thought we were done, you'd be wrong.

@@ -317,6 +317,30 @@ class TestFunctional < Test::Unit::TestCase
     # Commit that baby and make sure we're still rockin'.
     commit :message => "moves and copies"
     assert_verify
+    
+    exit_repo
+    enter_repo 'testrepo'
+    
+    # Create a dummy commit
+    File.open('used_in_bundle', 'w') {|f| f.write "monkay" }
+    amp "commit", :message => 'monkey'
+    assert_verify
+    
+    # Create and compare bundles of ALL revisions
+    assert_amp_hg_bundle_same 'amp_bundle_all.bundle', :all => true
+    
+    # Now go only up to the 3rd revision.
+    assert_amp_hg_bundle_same 'bundle_up_to_3.bundle', :rev => 3, :all => true
+    
+    # We shall now test types 'none', 'bzip2', and 'gzip'
+    ['none', 'bzip2', 'gzip'].each do |type|
+      assert_amp_hg_bundle_same "bundle_up_to_7_with_type_#{type}.bundle",
+                                :rev => 7, :type => type, :all => true
+    end
+    
+    # Test making bundles with --base
+    assert_amp_hg_bundle_same 'bundle_up_to_3.bundle', :rev => 3, :base => 2
+    assert_amp_hg_bundle_same 'bundle_up_to_3.bundle', :base => 3
   ensure
     # cleanup
     exit_repo
@@ -326,7 +350,14 @@ class TestFunctional < Test::Unit::TestCase
   end
   
   private ##################################
-
+  
+  def assert_amp_hg_bundle_same(fname, opts={})
+    amp "bundle", ["amp_#{fname}"], opts
+    hg  "bundle", ["hg_#{fname}"],  opts
+    assert_files_are_same "amp_#{fname}", "hg_#{fname}"
+    ["amp_#{fname}", "hg_#{fname}"].each {|f| File.delete f }
+  end
+  
   ##
   # Asserts that the repo is in perfect working order. This requires the
   # hg binary, since we trust them above all when it comes to verifying our
@@ -387,6 +418,11 @@ class TestFunctional < Test::Unit::TestCase
   
   def assert_file_is_removed(file)
     assert_file_has_status(file, :removed)
+  end
+  
+  def assert_files_are_same(file1, file2)
+    output1 = `md5 #{file1}`.strip.match(/MD5 (?:.+) = (.*)/)
+    output2 = `md5 #{file2}`.strip.match(/MD5 (?:.+) = (.*)/)
   end
   
   def assert_command_match(regex, command, args=[], opts={})
@@ -503,6 +539,7 @@ class TestFunctional < Test::Unit::TestCase
     args = [args] unless args.kind_of?(Array)
     %x(TESTING='true' && #{AMP_BINARY} #{command} #{options_hash_to_string(opts)} #{args.join(" ")})
   end
+  alias_method :amp, :run_amp_command
   
   ##
   # Executes the given command using the hg binary (mercurial's binary). Used for when
@@ -513,6 +550,7 @@ class TestFunctional < Test::Unit::TestCase
     args = [args] unless args.kind_of?(Array)
     %x(hg #{command} #{options_hash_to_string(opts)} #{args.join(" ")})
   end
+  alias_method :hg, :run_hg_command
   
   ##
   # Copies a file, relative to "functional_tests/resources", to the destination, relative to

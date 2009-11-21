@@ -67,7 +67,7 @@ module Amp
       if idx.is_a? String
         return @index[@index.node_map[idx]]
       elsif idx.is_a? Array
-        STDERR.puts idx.inspect
+        STDERR.puts idx.inspect # KILLME
         idx
       else
         return @index[idx]

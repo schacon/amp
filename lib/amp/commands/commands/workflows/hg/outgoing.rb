@@ -37,7 +37,7 @@ HELP
     o = repo.changelog.nodes_between(o, url[:revs])[:between]
     
     # reverse the order, because the newest are usually last
-    # this is noticed if you get bitbucket notifications
+    # this is noticed if you get bitbucket email notifications
     o.reverse! if opts[:"newest-first"]
   
     # trim the list if it's bigger than our limit
