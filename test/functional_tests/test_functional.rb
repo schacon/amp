@@ -423,6 +423,7 @@ class TestFunctional < Test::Unit::TestCase
   def assert_files_are_same(file1, file2)
     output1 = `md5 #{file1}`.strip.match(/MD5 (?:.+) = (.*)/)
     output2 = `md5 #{file2}`.strip.match(/MD5 (?:.+) = (.*)/)
+    assert_equal output1[1], output2[1]
   end
   
   def assert_command_match(regex, command, args=[], opts={})
