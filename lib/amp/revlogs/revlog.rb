@@ -758,9 +758,7 @@ module Amp
       if curr > 0
         if d.nil? || d.empty?
           ptext = decompress_revision node_id_for_index(prev)
-          #p "BEFORE PATCH, in ADD_REVISION: #{ptext}" if @index_file =~ /00changelog/ && false # KILLME
           d = Diffs::MercurialDiff.text_diff(ptext, text)
-          #p "MADE PATCH, in ADD_REVISION: #{d}" if @index_file =~ /00changelog/ && false # KILLME
         end
         data = RevlogSupport::Support.compress d
         len = data[:compression].size + data[:text].size
@@ -890,10 +888,6 @@ module Amp
             next
           end
           delta = chunk[80..-1]
-          if @index_file =~ /STYLE\.txt/ && false
-            puts "Adding revision #{link}: #{[node, parent1, parent2, cs].inspect}\nNode Map: #{@index.node_map.inspect}"
-            puts delta.inspect
-          end
           [parent1, parent2].each do |parent|
             unless @index.node_map[parent]
               raise RevlogSupport::LookupError.new("unknown parent #{parent}"+
@@ -910,18 +904,17 @@ module Amp
           end
           
           if chain == prev
-            if @index_file =~ /STYLE\.txt/ && false
-              puts "chain == prev"
+            begin
+              cdelta = RevlogSupport::Support.compress delta
+              cdeltalen = cdelta[:compression].size + cdelta[:text].size
+              text_len = Diffs::MercurialPatch.patched_size text_len, delta
+            rescue
+              puts "Error patching #{@index_file}"
+              raise
             end
-            cdelta = RevlogSupport::Support.compress delta
-            cdeltalen = cdelta[:compression].size + cdelta[:text].size
-            text_len = Diffs::MercurialPatch.patched_size text_len, delta
           end
           
           if chain != prev || (endpt - start + cdeltalen) > text_len * 2
-            if @index_file =~ /STYLE\.txt/ && false
-              puts "hardcore section with apply_patches"
-            end
             #flush our writes here so we can read it in revision
             data_file_handle.flush if data_file_handle
             index_file_handle.flush
@@ -929,10 +922,7 @@ module Amp
             if text.size == 0
               text = delta[12..-1]
             else
-              puts "BEFORE PATCH: "+text.inspect if @index_file =~ /STYLE\.txt/ && false
-              puts delta.inspect
               text = Diffs::MercurialPatch.apply_patches(text, [delta])
-              puts "AFTER PATCH: "+text.inspect if @index_file =~ /STYLE\.txt/ && false
             end
             chk = add_revision(text, journal, link, parent1, parent2, 
                                   nil, index_file_handle)

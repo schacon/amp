@@ -79,7 +79,7 @@ module Amp
           outlen += length
         end
         
-        raise Exception.new("patch cannot be decoded") if bin != binend
+        raise "patch cannot be decoded" if bin != binend
         
         outlen += orig - last
         outlen

@@ -91,7 +91,7 @@ module Amp
       def find_longest_match(alo, ahi, blo, bhi)
         j2len = {}
         besti, bestj, bestsize = alo, blo, 0
-        alo.upto(ahi) do |i|
+        alo.upto(ahi-1) do |i|
           newj2len = {}
           @b2j[@a[i,1]] && @b2j[@a[i,1]].each do |j|
             next if j < blo
