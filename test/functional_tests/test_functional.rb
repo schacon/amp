@@ -363,7 +363,7 @@ class TestFunctional < Test::Unit::TestCase
   # hg binary, since we trust them above all when it comes to verifying our
   # stuff. Fails if there are any integrity errors in our files.
   def assert_verify
-    assert_hg_command_no_match(/integrity errors/, "verify")
+    assert_command_no_match(/integrity errors/, "verify")
   end
   
   ##
@@ -421,6 +421,9 @@ class TestFunctional < Test::Unit::TestCase
   end
   
   def assert_files_are_same(file1, file2)
+    flunk "Tried to compare #{file1} but it doesn't exist" unless File.exist? file1
+    flunk "Tried to compare #{file2} but it doesn't exist" unless File.exist? file2
+      
     output1 = `md5 #{file1}`.strip.match(/MD5 (?:.+) = (.*)/)
     output2 = `md5 #{file2}`.strip.match(/MD5 (?:.+) = (.*)/)
     assert_equal output1[1], output2[1]
