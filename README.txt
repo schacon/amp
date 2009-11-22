@@ -1,6 +1,6 @@
 = amp
 
-* http://bitbucket.org/carbonica/amp
+* http://amp.carboni.ca/
 
 == DESCRIPTION:
 
@@ -11,18 +11,16 @@ A ruby interface to Mercurial repositories, from the command line or a program.
 * Supports Mercurial repositories completely!
 
 == SYNOPSIS:
-  First, mad shoutz to those who wrote Mercurial. It's truly fantastic, and
-  we based a lot of our code on it. *Peace*
-  
-  
+
   % amp add file.txt
   edit...
-  % amp commit -m "leethaxness"
+  % amp commit -m "updated the file"
   % amp push
   
   Nothing really changes from using the hg command. There are a few differences
   here and there (see `amp help [COMMAND]`), but really, it's pretty much the same.
   
+
   Using amp as a library:
   
   require "irb"
@@ -36,7 +34,7 @@ A ruby interface to Mercurial repositories, from the command line or a program.
   
   repo = Repositories::LocalRepository.new "/Users/ari/src/amp.code"
   
-  # makeses a file...
+  # make a file...
   Dir.chdir "/Users/ari/src/amp.code/"
   open "testy.txt", "w" {|f| f.puts "hello, world!" }
   
@@ -59,8 +57,7 @@ A ruby interface to Mercurial repositories, from the command line or a program.
   repo.push
   
   Everything here is really straight forward. Plus, if it's not, we've taken
-  the liberty to document the motherfucking shit out of motherfucking everything.
-  Hooray!
+  the liberty to document everything.
   
 == REQUIREMENTS:
 
@@ -68,7 +65,7 @@ A ruby interface to Mercurial repositories, from the command line or a program.
 
 == INSTALL:
 
-* [sudo] gem install amp
+* sudo gem install amp --no-wrappers
 
 == LICENSE:
 
