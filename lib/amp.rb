@@ -153,7 +153,7 @@ require      "amp/repository/repository.rb"
 
 module Amp
   VERSION = '0.5.0'
-  VERSION_TITLE = "Charles Hieronymus Pace"
+  VERSION_TITLE = "John Locke"
   
   def self.new_irb_session(bndng)
     require 'irb'
@@ -197,4 +197,4 @@ if ENV["TESTING"] == "true"
 end
 
 # Benchmarking stuff
-#need { 'profiling_hacks' }
+#need { 'amp/profiling_hacks' }
