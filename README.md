@@ -30,49 +30,36 @@ Synopsis:
   
 Nothing really changes from using the hg command. There are a few differences
 here and there (see `amp help [COMMAND]`), but really, it's pretty much the same.
-  
-Using amp as a library:
-  
-    require "irb"
-    require "irb/workspace"
-    require "amp"
-    include Amp
-    
-    def new_irb(*args)
-      IRB::Irb.new(Workspace.new(*args)).eval_input
+
+Right now, we're trying to simplify the docs, to make it easier to tell what things
+are relevant to someone working with Amp. Most of our documentation is on our website,
+but here's an example of some Ampfile code:
+
+    command "stats" do |c|
+      c.workflow :hg
+      c.desc "Prints how many commits each user has contributed"
+      c.on_run do |opts, args|
+        repo = opts[:repository]
+        users = Hash.new {|h, k| h[k] = 0}
+        repo.each do |changeset|
+          users[changeset.user.split("@").first] += 1
+        end
+        users.to_a.sort {|a,b| b[1] <=> a[1]}.each do |u,c|
+          puts "#{u}: #{c}"
+        end
+      end
     end
     
-    repo = Repositories::LocalRepository.new "/Users/ari/src/amp.code"
-    
-    # make a file...
-    Dir.chdir "/Users/ari/src/amp.code/"
-    open "testy.txt", "w" {|f| f.puts "hello, world!" }
-    
-    # and add it to the repo!
-    repo.add "testy.txt"
-    
-    # commit
-    repo.commit :message => 'blah'
-    
-    # do some more things...
-    
-    # pull and update...
-    repo.pull
-    result = repo.update
-    
-    (puts "You need to fix shit!"; new_irb binding) unless result.success?
-    # type result.unresolved to get a list of conflicts
-    
-    # and push!
-    repo.push
-  
-Everything here is really straight forward. Plus, if it's not, we've taken
-the liberty to document everything.
+In the on\_run handler, _repo_ is a LocalRepository object. Its #each method iterates over
+ChangeSet objects, which store information about that particular commit, including which user
+committed it. These objects will be most relevant to users, but we'll try to make things more
+obvious as we refine our documentation. At the very least, we've tried to provide a useful
+description of every method we can.
   
 Requirements:
 -------------
 * Ruby
-* Nothing else!
+* Nothing else! (except rubygems to install - for now)
 
 Install:
 --------

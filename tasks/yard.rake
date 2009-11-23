@@ -36,14 +36,14 @@ namespace :yard do
   
   desc 'Force a rebuild of the documentation'
   task :full_doc => [ :todo ] do
-    text_files = ["SCHEDULE.markdown", "AUTHORS", "STYLE", "TODO.markdown"]
+    text_files = ["SCHEDULE.markdown", "AUTHORS", "STYLE", "TODO.markdown", "LICENSE"]
     options    = ["--private", "--protected", "-q", "-r README.md"]
     ruby_files = ["lib/**/**/**/*.rb", "lib/**/**/*.rb", "lib/**/*.rb", "lib/*.rb"]
     sh "yardoc #{options.join(" ")} #{ruby_files.join(" ")} - #{text_files.join(" ")}"
   end
     
   YARD::Rake::YardocTask.new :doc do |yard|
-    yard.options = ['--no-output', '--private', '--protected', '--use-cache', "-r README.md" ]
+    yard.options = ['--no-output', '--private', '--protected', '--use-cache' ]
   end
     
   
