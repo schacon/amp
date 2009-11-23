@@ -1551,14 +1551,15 @@ module Amp
         dirstate.parents.select {|p| p != NULL_ID }
       end
       
+      ##
+      # There are two ways to push to remote repo:
+      #
+      # addchangegroup assumes local user can lock remote
+      # repo (local filesystem, old ssh servers).
+      #
+      # unbundle assumes local user cannot lock remote repo (new ssh
+      # servers, http servers).
       def push(remote_repo, opts={:force => false, :revs => nil})
-        # there are two ways to push to remote repo:
-        #
-        # addchangegroup assumes local user can lock remote
-        # repo (local filesystem, old ssh servers).
-        #
-        # unbundle assumes local user cannot lock remote repo (new ssh
-        # servers, http servers).
         if remote_repo.capable? "unbundle"
           push_unbundle remote_repo, opts
         else
