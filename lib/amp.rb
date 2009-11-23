@@ -153,7 +153,7 @@ require      "amp/repository/repository.rb"
 
 module Amp
   VERSION = '0.5.0'
-  VERSION_TITLE = "Charles Hieronymus Pace"
+  VERSION_TITLE = "John Locke"
 end
 
 if ENV["TESTING"] == "true"
