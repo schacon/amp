@@ -99,8 +99,6 @@ class TestFilenameCacheStore < Test::Unit::TestCase
       result << arr
     end
     
-    require 'pp'
-    pp expected, result
     expected.each do |exp|
       flunk "Couldn't find #{exp.inspect} in walked list." unless result.include? exp
     end
