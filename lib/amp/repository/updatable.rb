@@ -114,6 +114,12 @@ module Amp
       end
       
       ##
+      # Merge two heads
+      def merge(node, force=false)
+        update node, true, force, false
+      end
+      
+      ##
       # Updates the repository to the given node, clobbering (removing) changes
       # along the way. This has the effect of turning the working directory into
       # a pristine copy of the requested changeset. Really just a nice way of

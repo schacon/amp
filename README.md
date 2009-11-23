@@ -87,11 +87,11 @@ ________
   # do some more things...
   
   # pull and update...
-  repo.pull remote
-  result = repo.update
+  result = repo.pull remote
+  result = repo.update if result.success?
   
   (puts "You need to fix things!"; new_irb_session binding) unless result.success?
-  # type result.unresolved to get a list of conflicts
+  # type result[:unresolved] to get a list of conflicts
   
   # and push!
   repo.push remote

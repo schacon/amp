@@ -647,12 +647,19 @@ module Amp
           end # end each
         end # end if
         
+        hdz = branch_heads
         # never return 0 here
-        if new_heads < old_heads
-          new_heads - old_heads - 1
-        else
-          new_heads - old_heads + 1
-        end # end if
+        ret = if new_heads < old_heads
+                new_heads - old_heads - 1
+              else
+                new_heads - old_heads + 1
+              end # end if
+        
+        class << ret
+          def success?; self <= 1 || hdz.size == 1; end
+        end
+        
+        ret
       end # end def
       
       ##
