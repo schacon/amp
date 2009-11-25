@@ -4,12 +4,15 @@ end
 
 if RUBY_VERSION < "1.9"
   class String
+    require 'enumerator' unless instance_method(:to_enum)
+
     # DON'T USE String#each. Use String#each_line
     def lines
-      self.split("\n").each do |l|
+      return to_enum(:lines) if !block_given?
+      self.split(/^/).each do |l|
         yield l
       end
-    end
+    end unless instance_method(:lines)
     
     ##
     # Returns the numeric, ascii value of the first character
@@ -18,13 +21,13 @@ if RUBY_VERSION < "1.9"
     # @return [Fixnum] the ascii value of the first character in the string
     def ord
       self[0]
-    end
+    end unless instance_method(:ord)
   end
   class Object
     def tap
       yield self
       self
-    end
+    end unless instance_method(:tap)
   end
 else
   # 1.9 +
