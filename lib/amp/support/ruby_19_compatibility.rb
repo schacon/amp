@@ -4,7 +4,7 @@ end
 
 if RUBY_VERSION < "1.9"
   class String
-    require 'enumerator' unless instance_method(:to_enum)
+    require 'enumerator' unless method_defined?(:to_enum)
 
     # DON'T USE String#each. Use String#each_line
     def lines
@@ -12,7 +12,7 @@ if RUBY_VERSION < "1.9"
       self.split(/^/).each do |l|
         yield l
       end
-    end unless instance_method(:lines)
+    end unless method_defined?(:lines)
     
     ##
     # Returns the numeric, ascii value of the first character
@@ -21,13 +21,13 @@ if RUBY_VERSION < "1.9"
     # @return [Fixnum] the ascii value of the first character in the string
     def ord
       self[0]
-    end unless instance_method(:ord)
+    end unless method_defined?(:ord)
   end
   class Object
     def tap
       yield self
       self
-    end unless instance_method(:tap)
+    end unless method_defined?(:tap)
   end
 else
   # 1.9 +
