@@ -22,3 +22,6 @@ task :"build-website" do
     end
   end
 end
+
+task :default => :"build-website" do
+end
