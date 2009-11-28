@@ -761,7 +761,7 @@ module Amp
     # @param [String] p2 the parent nodeids of the revision
     # @param d an optional precomputed delta
     # @return [String] the digest ID referring to the node in the log
-    def add_revision(text, transaction, link, p1, p2, d=nil, index_file_handle=nil)
+    def add_revision(text, journal, link, p1, p2, d=nil, index_file_handle=nil)
       node = RevlogSupport::Support.history_hash(text, p1, p2)
       return node if @index.node_map[node]
       curr = index_size
@@ -788,9 +788,13 @@ module Amp
       
       entry = RevlogSupport::IndexEntry.new(RevlogSupport::Support.offset_version(offset, 0), 
                 len, text.size, base, link, rev(p1), rev(p2), node)
+                
+      offset += curr * @index.entry_size
+      journal << [@index_file, offset, curr]
+                
       @index << entry
       @index.node_map[node] = curr
-      @index.write_entry(@index_file, entry, transaction, data, index_file_handle)
+      @index.write_entry(@index_file, entry, journal, data, index_file_handle)
       @index.cache = [node, curr, text]
       node
     end
