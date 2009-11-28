@@ -739,10 +739,7 @@ module Amp
         @version &= ~ RevlogSupport::Support::REVLOG_NG_INLINE_DATA
         @inline   = false
         each do |i|
-          # THE FOLLOWING LINE IS NOT CORRECT
-          # IT IS DIRECTLY TRANSLATED PYTHON CODE
-          # I HAVE NO IDEA HOW WE DID THIS BEFORE
-          e = @io.pack_entry @index[i], @node, @version, i
+          e = @index.pack_entry @index[i], @version
           fp.write e
         end
       end
