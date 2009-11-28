@@ -48,6 +48,7 @@ module Amp
         # the use of @index.index is deliberate!
         @index.index << RevlogSupport::IndexEntry.new(0,0,0,-1,-1,-1,-1,NULL_ID)
       end
+      
     end
     alias_method :revlog_initialize, :initialize
     
@@ -718,6 +719,7 @@ module Amp
       data_offset = data_start_for_index trindex
       tr.add @data_file, data_offset
       df = open(@data_file, 'w')
+      
       begin
         calc = @index.entry_size
         self.size.times do |r|
@@ -730,11 +732,23 @@ module Amp
       ensure
         df.close
       end
+      
       fp.close
       
-      ############ TODO
-      # FINISH THIS METHOD
-      ############ TODO
+      open(@index_file, 'w') do |fp| # automatically atomic
+        @version &= ~ RevlogSupport::Support::REVLOG_NG_INLINE_DATA
+        @inline   = false
+        each do |i|
+          # THE FOLLOWING LINE IS NOT CORRECT
+          # IT IS DIRECTLY TRANSLATED PYTHON CODE
+          # I HAVE NO IDEA HOW WE DID THIS BEFORE
+          e = @io.pack_entry @index[i], @node, @version, i
+          fp.write e
+        end
+      end
+      
+      tr.replace @index_file, trindex * calc
+      @chunk_cache = nil # reset the cache
     end
     
     ##
@@ -771,6 +785,7 @@ module Amp
         len = data[:compression].size + data[:text].size
         base = curr
       end
+      
       entry = RevlogSupport::IndexEntry.new(RevlogSupport::Support.offset_version(offset, 0), 
                 len, text.size, base, link, rev(p1), rev(p2), node)
       @index << entry
