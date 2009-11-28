@@ -754,6 +754,7 @@ module Amp
       prev = curr - 1
       base = self[prev].base_rev
       offset = data_end_for_index prev
+      
       if curr > 0
         if d.nil? || d.empty?
           ptext = decompress_revision node_id_for_index(prev)
@@ -763,6 +764,7 @@ module Amp
         len = data[:compression].size + data[:text].size
         dist = len + offset - data_start_for_index(base)
       end
+      
       # Compressed diff > size of actual file
       if curr == 0 || dist > text.size * 2
         data = RevlogSupport::Support.compress text
@@ -920,10 +922,7 @@ module Amp
             end
             chk = add_revision(text, journal, link, parent1, parent2, 
                                   nil, index_file_handle)
-            # if (! data_file_handle) && (! @index.inline?)
-            #   data_file_handle = open(@data_file, "a")
-            #   index_file_handle = open(@index_file, "a")
-            # end
+            
             if chk != node
               raise RevlogSupport::RevlogError.new("consistency error "+
                         "adding group")
