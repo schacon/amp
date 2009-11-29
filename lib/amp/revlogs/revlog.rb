@@ -149,7 +149,11 @@ module Amp
     ##
     # Returns the offset where the data begins for the revision at _index_.
     def data_start_for_index(index)
-      RevlogSupport::Support.get_offset self[index].offset_flags
+      result = RevlogSupport::Support.get_offset self[index].offset_flags
+      if Amp::Support::SYSTEM[:endian] == :big
+        result = result.byte_swap_64
+      end
+      result
     end
     
     ##
