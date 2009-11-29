@@ -45,6 +45,11 @@ everything. If you can, fix up the revlog API to make it suck a little less.
 = hg Extensions
 Start porting over the Mercurial extensions. 'Nuff said.
 
+= Expanding `amp serve`
+We'd like it to be more like BitBucket and GitHub. Go crazy. One thing you
+could do is implement other methods for storing users besides memory. There
+are incomplete frameworks for Sequel and DataMapper storage that need TLC.
+
 == Documentation
 
 = User guide
