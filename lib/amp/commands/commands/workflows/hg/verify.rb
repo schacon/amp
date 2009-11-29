@@ -13,5 +13,7 @@ command :verify do |c|
       Amp::UI.tell "#{results.errors} integrity error#{results.errors == 1 ? '' : 's' }, "
       Amp::UI.tell "#{results.warnings} warning#{results.warnings == 1 ? '' : 's' }."
     end
+    
+    Amp::UI.say
   end
 end
