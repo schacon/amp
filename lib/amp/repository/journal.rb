@@ -41,7 +41,7 @@ module Amp
     #   of the journal file we'll be using
     # @param [Proc] after_close A proc to call (with no args) after we
     #   close (finish) the transaction.
-    def initialize(reporter=StandardErrorReporter, journal="journal#{rand(10000)}", createmode=nil, &after_close)   
+    def initialize(reporter=StandardErrorReporter, journal=".journal#{rand(10000)}", createmode=nil, &after_close)   
       @count = 1
       @reporter = reporter
       @after_close = after_close
@@ -49,7 +49,7 @@ module Amp
       @map = {}
       @journal_file = journal
       
-      @file = open(@journal_file, "w")
+      @file = Kernel::open(@journal_file, "w")
       
       FileUtils.chmod(createmode & 0666, @journal_file) unless createmode.nil?
     end
