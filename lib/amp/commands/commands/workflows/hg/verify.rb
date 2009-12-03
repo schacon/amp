@@ -10,7 +10,7 @@ command :verify do |c|
     Amp::UI.tell "#{results.revisions} revision#{results.revisions == 1 ? '' : 's' }"
     
     if results.errors > 0 || results.warnings > 0
-      Amp::UI.tell "#{results.errors} integrity error#{results.errors == 1 ? '' : 's' }, "
+      Amp::UI.tell ", #{results.errors} integrity error#{results.errors == 1 ? '' : 's' }, "
       Amp::UI.tell "#{results.warnings} warning#{results.warnings == 1 ? '' : 's' }."
     end
     

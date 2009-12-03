@@ -306,10 +306,10 @@ module Amp
           # otherwise we win because we're tip-most
           an, ah = nh
           bn, bh = global_tags[k]
-          if [bn != an, bh[an], (!ah[bn] || bh.size > ah.size)].all?
+          if [bn != an, bh.include?(an), (!ah.include?(bn) || bh.size > ah.size)].all?
             an = bn
           end
-          ah += bh.select {|n| !ah[n]}
+          ah += bh.select {|n| !ah.include?(n) }
           global_tags[k] = an, ah
           tag_types[k] = tag_type
         end
