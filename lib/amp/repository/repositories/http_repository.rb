@@ -341,6 +341,7 @@ module Amp
           end
         else
           # We got a successful response! Woo!
+          UI.status "user #{@username} allowed. access granted" if @username && @password
           response
         end
       end
