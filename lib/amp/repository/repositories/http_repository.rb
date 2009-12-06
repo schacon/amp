@@ -47,6 +47,8 @@ module Amp
       # @param [Amp::AmpConfig] config the configuration for Amp right now.
       def initialize(path="", create=false, config=nil)
         @url, @config = URI.parse(path), config
+        @username ||= @url.user 
+        @password ||= @url.password
         @auth_mode = :none
         raise InvalidArgumentError.new("Invalid URL for an HTTP repo!") if @url.nil?
       end
@@ -158,7 +160,6 @@ module Amp
         #require_capability 'changegroupsubset', 'look up remote changes'
         base_list = bases.map {|n| n.hexlify }.join ' '
         head_list = heads.map {|n| n.hexlify }.join ' '
-#        p base_list, head_list
         f, code = *do_read("changegroupsubset", :bases => base_list, :heads => head_list)
         
         s = StringIO.new "",(ruby_19? ? "w+:ASCII-8BIT" : "w+")
@@ -340,8 +341,6 @@ module Amp
             do_cmd command, args
           end
         else
-          # We got a successful response! Woo!
-          UI.status "user #{@username} allowed. access granted" if @username && @password
           response
         end
       end

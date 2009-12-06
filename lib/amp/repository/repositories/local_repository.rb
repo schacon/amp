@@ -1353,7 +1353,7 @@ module Amp
             
             UI::debug "request #{count}: #{r.map{|i| short i }}"
             
-            (0..(r.size-1)).step(10) do |p|
+            (0 .. (r.size-1)).step(10) do |p|
               remote.branches(r[p..(p+9)]).each do |b|
                 UI::debug "received #{short b[0]}:#{short b[1]}"
                 unknown << b
