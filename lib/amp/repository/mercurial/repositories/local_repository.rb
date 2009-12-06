@@ -779,7 +779,7 @@ module Amp
               node_list = gen_node_list[file_revlog]
               
               if node_list.any?
-                result << RevlogSupport::ChangeGroup.chunk_header(fname.size)
+                result << RevlogSupport::Mercurial::ChangeGroup.chunk_header(fname.size)
                 result << fname
                 
                 lookup = lookup_revlink_func[file_revlog] # Proc#call
@@ -787,7 +787,7 @@ module Amp
                 file_revlog.group(node_list, lookup) {|chunk| result << chunk }
               end
             end
-            result << RevlogSupport::ChangeGroup.closing_chunk
+            result << RevlogSupport::Mercurial::ChangeGroup.closing_chunk
             
             run_hook :post_outgoing, :node => nodes[0].hexlify, :source => source
             

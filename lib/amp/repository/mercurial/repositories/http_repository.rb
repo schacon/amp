@@ -1,4 +1,5 @@
 require 'uri'
+require 'zlib'
 
 # to shut up those fucking warnings!
 # taken from http://www.5dollarwhitebox.org/drupal/node/64
@@ -21,7 +22,7 @@ module Amp
       # The protocol's pretty simple - just ?cmd="command", and any other
       # args you need. Should be pretty easy.
       class HTTPRepository < Repository
-        include RevlogSupport::Node
+        include RevlogSupport::Mercurial::Node
         
         DEFAULT_HEADERS = {"User-agent" => "Amp-#{Amp::VERSION}",
                            "Accept" => "Application/Mercurial-0.1"}
