@@ -1,6 +1,6 @@
 module Amp
-  module Mercurial
-    module Diffs
+  module Diffs
+    module Mercurial
       
       ##
       # This handles applying patches in mercurial. yay!!!!

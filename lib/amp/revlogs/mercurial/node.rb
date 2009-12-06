@@ -1,6 +1,6 @@
 module Amp
-  module Mercurial
-    module RevlogSupport
+  module RevlogSupport
+    module Mercurial
       module Node
         # the null node ID - just 20 null bytes
         NULL_ID = "\0" * 20

@@ -1,6 +1,6 @@
 module Amp
-  module Mercurial
-    module Graphs
+  module Graphs
+    module Mercurial
       
       ##
       # = AncestorGenerator

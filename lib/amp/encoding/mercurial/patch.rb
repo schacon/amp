@@ -1,8 +1,8 @@
 # I have seen few files so poorly organized such as patch.py
 # What. The. Fuck. This is going to take so long to make.
 module Amp
-  module Mercurial
-    module Patch
+  module Patch
+    module Mercurial
       
       class PatchError < StandardError; end
       class NoHunkError < PatchError; end

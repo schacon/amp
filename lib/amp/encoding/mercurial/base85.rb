@@ -1,8 +1,8 @@
 # = Amp
 module Amp
   # = Encoding
-  module Mercurial
-    module Encoding
+  module Encoding
+    module Mercurial
       # This class provides methods for encoding and decoding to base85, a storage format used
       # by Mercurial. Base85 is like base64, only with some extra characters to improve compression.
       # This is a direct port of the python file base85.py in the Mercurial distribution.

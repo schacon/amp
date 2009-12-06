@@ -1,7 +1,7 @@
 require 'tempfile'
 module Amp
-  module Mercurial
-    module RevlogSupport
+  module RevlogSupport
+    module Mercurial
       
       ##
       # This class handles changegroups - most specifically, packaging up a bunch

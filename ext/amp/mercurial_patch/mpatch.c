@@ -397,9 +397,9 @@ static VALUE amp_mpatch_patched_size(VALUE self, VALUE orig_r, VALUE bin_r)
 void Init_MercurialPatch() {
     
     rb_mAmp = rb_define_module("Amp");
-    rb_mMercurial = rb_define_module_under(rb_mAmp, "Mercurial");
-    rb_mDiffs = rb_define_module_under(rb_mMercurial, "Diffs");
-    rb_mMercurialPatch = rb_define_module_under(rb_mDiffs, "MercurialPatch");
+    rb_mDiffs = rb_define_module_under(rb_mAmp, "Diffs");
+    rb_mMercurial = rb_define_module_under(rb_mDiffs, "Mercurial");
+    rb_mMercurialPatch = rb_define_module_under(rb_mMercurial, "MercurialPatch");
     
     rb_define_singleton_method(rb_mMercurialPatch, "patched_size", amp_mpatch_patched_size, 2);
     rb_define_singleton_method(rb_mMercurialPatch, "apply_patches", amp_mpatch_apply_patches, 2);

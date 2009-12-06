@@ -1,8 +1,8 @@
 require 'tempfile'
 
 module Amp
-  module Mercurial
-    module Merges
+  module Merges
+    module Mercurial
       
       ##
       # This module handles figuring out how to merge files using the user's

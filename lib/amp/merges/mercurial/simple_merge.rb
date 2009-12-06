@@ -1,6 +1,6 @@
 module Amp
-  module Mercurial
-    module Merges
+  module Merges
+    module Mercurial
       
       class MergeAssertion < StandardError; end
       ##

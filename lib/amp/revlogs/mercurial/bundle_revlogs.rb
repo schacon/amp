@@ -1,6 +1,7 @@
 module Amp
-  module Mercurial
-    module Bundles
+  module Bundles
+    module Mercurial
+      
       ##
       # This module handles revlogs passed to our client (or server)
       # through the bundle file format. Thing is, this revision log

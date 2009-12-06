@@ -29,73 +29,91 @@ module Amp
   autoload :Generator,                 "amp/support/generator.rb"
   autoload :Opener,                    "amp/support/openers.rb"
   autoload :Match,                     "amp/support/match.rb"
-  autoload :Ignore,                    "amp/support/ignore.rb"
   autoload :AmpConfig,                 "amp/support/amp_config.rb"
   autoload :UI,                        "amp/support/amp_ui.rb"
-                                        
-  autoload :Journal,                   "amp/repository/journal.rb"
-  autoload :VersionedFile,             "amp/repository/versioned_file.rb"
-  autoload :VersionedWorkingFile,      "amp/repository/versioned_file.rb"
   
-  autoload :Revlog,                    "amp/revlogs/revlog.rb"      
-  autoload :Manifest,                  "amp/revlogs/manifest.rb"
-  autoload :FileLog,                   "amp/revlogs/file_log.rb"
-  autoload :Changeset,                 "amp/revlogs/changeset.rb"
-  autoload :WorkingDirectoryChangeset, "amp/revlogs/changeset.rb"
-  autoload :ChangeGroup,               "amp/revlogs/changegroup.rb"
-  autoload :ChangeLog,                 "amp/revlogs/changelog.rb"
+  module Mercurial
+    autoload :Ignore,                    "amp/support/mercurial/ignore.rb"
+    
+    autoload :Journal,                   "amp/repository/mercurial/journal.rb"
+    autoload :VersionedFile,             "amp/repository/mercurial/versioned_file.rb"
+    autoload :VersionedWorkingFile,      "amp/repository/mercurial/versioned_file.rb"
+    
+    autoload :Revlog,                    "amp/revlogs/mercurial/revlog.rb"      
+    autoload :Manifest,                  "amp/revlogs/mercurial/manifest.rb"
+    autoload :FileLog,                   "amp/revlogs/mercurial/file_log.rb"
+    autoload :Changeset,                 "amp/revlogs/mercurial/changeset.rb"
+    autoload :WorkingDirectoryChangeset, "amp/revlogs/mercurial/changeset.rb"
+    autoload :ChangeGroup,               "amp/revlogs/mercurial/changegroup.rb"
+    autoload :ChangeLog,                 "amp/revlogs/mercurial/changelog.rb"
+  end
   
   module Bundles
-    autoload :BundleChangeLog,         "amp/revlogs/bundle_revlogs.rb"
-    autoload :BundleFileLog,           "amp/revlogs/bundle_revlogs.rb"
-    autoload :BundleManifest,          "amp/revlogs/bundle_revlogs.rb"
-    autoload :BundleRevlog,            "amp/revlogs/bundle_revlogs.rb"
+    module Mercurial
+      autoload :BundleChangeLog,         "amp/revlogs/mercurial/bundle_revlogs.rb"
+      autoload :BundleFileLog,           "amp/revlogs/mercurial/bundle_revlogs.rb"
+      autoload :BundleManifest,          "amp/revlogs/mercurial/bundle_revlogs.rb"
+      autoload :BundleRevlog,            "amp/revlogs/mercurial/bundle_revlogs.rb"
+    end
+  end
+  
+  module Encoding
+    module Mercurial
+      autoload :Base85,                  "amp/encoding/mercurial/base85.rb"
+    end
   end                                      
                                            
-  module Encoding                          
-    autoload :Base85,                  "amp/encoding/base85.rb"
-  end                                      
-                                           
-  module Diffs                             
+  module Diffs
     autoload :BinaryDiff,              "amp/encoding/binary_diff.rb"
-    autoload :MercurialDiff,           "amp/encoding/mercurial_diff.rb"
-    autoload :MercurialPatch,          "amp/encoding/mercurial_patch.rb"
     autoload :SequenceMatcher,         "amp/encoding/difflib.rb"
+    
+    module Mercurial
+      autoload :MercurialDiff,           "amp/encoding/mercurial/mercurial_diff.rb"
+      autoload :MercurialPatch,          "amp/encoding/mercurial/mercurial_patch.rb"
+    end
   end
   
   module Graphs
-    autoload :AncestorCalculator,      "amp/graphs/ancestor.rb"
-    autoload :CopyCalculator,          "amp/graphs/copies.rb"
+    module Mercurial
+      autoload :AncestorCalculator,      "amp/graphs/mercurial/ancestor.rb"
+      autoload :CopyCalculator,          "amp/graphs/mercurial/copies.rb"
+    end
   end                                      
                                            
-  module Merges                            
-    autoload :MergeState,              "amp/merges/merge_state.rb"
-    autoload :MergeUI,                 "amp/merges/merge_ui.rb"
-    autoload :ThreeWayMerger,          "amp/merges/simple_merge.rb"
+  module Merges
+    module Mercurial                      
+      autoload :MergeState,              "amp/merges/mercurial/merge_state.rb"
+      autoload :MergeUI,                 "amp/merges/mercurial/merge_ui.rb"
+      autoload :ThreeWayMerger,          "amp/merges/mercurial/simple_merge.rb"
+    end
   end                                      
   
   module Repositories
-    autoload :BranchManager,           "amp/repository/branch_manager.rb"
-    autoload :BundleRepository,        "amp/repository/repositories/bundle_repository.rb"
-    autoload :DirState,                "amp/repository/dir_state.rb"
-    autoload :HTTPRepository,          "amp/repository/repositories/http_repository.rb"
-    autoload :HTTPSRepository,         "amp/repository/repositories/http_repository.rb"
-    autoload :LocalRepository,         "amp/repository/repositories/local_repository.rb"
-    autoload :Lock,                    "amp/repository/lock.rb"
-    autoload :Stores,                  "amp/repository/store.rb"
-    autoload :TagManager,              "amp/repository/tag_manager.rb"
-    autoload :Updatable,               "amp/repository/updatable.rb"
-    autoload :Verification,            "amp/repository/verification.rb"
-  end                                      
-                                           
-  module RevlogSupport                     
-    autoload :ChangeGroup,             "amp/revlogs/changegroup.rb"
-    autoload :Index,                   "amp/revlogs/index.rb"
-    autoload :IndexInlineNG,           "amp/revlogs/index.rb"
-    autoload :IndexVersion0,           "amp/revlogs/index.rb"
-    autoload :IndexVersionNG,          "amp/revlogs/index.rb"
-    autoload :Node,                    "amp/revlogs/node.rb"
-    autoload :Support,                 "amp/revlogs/revlog_support.rb"
+    module Mercurial
+      autoload :BranchManager,           "amp/repository/mercurial/branch_manager.rb"
+      autoload :BundleRepository,        "amp/repository/mercurial/repositories/bundle_repository.rb"
+      autoload :DirState,                "amp/repository/mercurial/dir_state.rb"
+      autoload :HTTPRepository,          "amp/repository/mercurial/repositories/http_repository.rb"
+      autoload :HTTPSRepository,         "amp/repository/mercurial/repositories/http_repository.rb"
+      autoload :LocalRepository,         "amp/repository/mercurial/repositories/local_repository.rb"
+      autoload :Lock,                    "amp/repository/mercurial/lock.rb"
+      autoload :Stores,                  "amp/repository/mercurial/store.rb"
+      autoload :TagManager,              "amp/repository/mercurial/tag_manager.rb"
+      autoload :Updatable,               "amp/repository/mercurial/updatable.rb"
+      autoload :Verification,            "amp/repository/mercurial/verification.rb"
+    end
+  end
+  
+  module RevlogSupport
+    module Mercurial
+      autoload :ChangeGroup,             "amp/revlogs/mercurial/changegroup.rb"
+      autoload :Index,                   "amp/revlogs/mercurial/index.rb"
+      autoload :IndexInlineNG,           "amp/revlogs/mercurial/index.rb"
+      autoload :IndexVersion0,           "amp/revlogs/mercurial/index.rb"
+      autoload :IndexVersionNG,          "amp/revlogs/mercurial/index.rb"
+      autoload :Node,                    "amp/revlogs/mercurial/node.rb"
+      autoload :Support,                 "amp/revlogs/mercurial/revlog_support.rb"
+    end
   end
   
   module Servers
