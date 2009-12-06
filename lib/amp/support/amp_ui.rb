@@ -145,7 +145,7 @@ module Amp
     # @param [#to_s] message the message to be printed.
     # @return [NilClass]
     def tell(message='')
-      $stdout.print message.to_s
+      puts message.to_s
     end
     
     ##
