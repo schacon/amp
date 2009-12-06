@@ -64,7 +64,7 @@ module Amp
         return @capabilities if @capabilities
         begin
           @capabilities = {}
-          do_read("capabilities").first.split.each do |k| 
+          do_read("capabilities")[:body].split.each do |k| 
             if k.include? "="
               key, value = k.split("=", 2)
               @capabilities[key] = value
@@ -92,7 +92,7 @@ module Amp
       # @return [String] the full node ID of the requested node on the remote server
       def lookup(key)
         require_capability("lookup", "Look up Remote Revision")
-        data = do_read("lookup", :key => key).first
+        data = do_read("lookup", :key => key)[:body]
         code, data = data.chomp.split(" ", 2)
         
         return data.unhexlify if code.to_i > 0
@@ -105,7 +105,7 @@ module Amp
       # @return [Array<String>] the full, binary node_ids of all the heads on
       #   the remote server.
       def heads
-        data = do_read("heads").first
+        data = do_read("heads")[:body]
         data.chomp.split(" ").map {|h| h.unhexlify }
       end
       
@@ -121,7 +121,7 @@ module Amp
       #   has 4 components: [head, root, parent1, parent2].
       def branches(nodes)
         n = nodes.map {|n| n.hexlify }.join(" ")
-        data = do_read("branches", :nodes => n).first
+        data = do_read("branches", :nodes => n)[:body]
         data.split("\n").map do |b|
           b.split(" ").map {|b| b.unhexlify}
         end
@@ -137,7 +137,7 @@ module Amp
       # @return [StringIO] the uncompressed changegroup as a stream
       def changegroup(nodes, kind)
         n = nodes.map{|i| i.hexlify }.join ' '
-        f = do_read('changegroup', n.empty? ? {} : {:roots => n}).first
+        f = do_read('changegroup', n.empty? ? {} : {:roots => n})[:body]
 
         s = StringIO.new "",(ruby_19? ? "w+:ASCII-8BIT" : "w+")
         s.write Zlib::Inflate.inflate(f)
@@ -160,10 +160,10 @@ module Amp
         #require_capability 'changegroupsubset', 'look up remote changes'
         base_list = bases.map {|n| n.hexlify }.join ' '
         head_list = heads.map {|n| n.hexlify }.join ' '
-        f, code = *do_read("changegroupsubset", :bases => base_list, :heads => head_list)
+        response  = *do_read("changegroupsubset", :bases => base_list, :heads => head_list)
         
         s = StringIO.new "",(ruby_19? ? "w+:ASCII-8BIT" : "w+")
-        s.write Zlib::Inflate.inflate(f)
+        s.write Zlib::Inflate.inflate(response[:body])
         s.rewind
         s
       end
@@ -201,7 +201,7 @@ module Amp
                                    :headers => {'Content-Type' => 'application/octet-stream'},
                                    :heads => heads.map{|h| h.hexlify }.join(' ')
         # parse output
-        resp_code, output = resp.first.split "\n"
+        resp_code, output = resp[:body].split "\n"
         
         # make sure the reponse was in an expected format (i.e. with a response code)
         unless resp_code.to_i.to_s == resp_code
@@ -232,12 +232,13 @@ module Amp
         
         (0..(pairs.size)).step(batch) do |i|
           n = pairs[i..(i+batch-1)].map {|p| p.map {|k| k.hexlify }.join("-") }.join(" ")
-          d, code = *do_read("between", :pairs => n)
+          resp = *do_read("between", :pairs => n)
           
-          raise RepoError.new("unexpected code: #{code}") unless code == 200
+          raise RepoError.new("unexpected code: #{code}") unless resp[:code] == 200
           
-          ret += d.lstrip.split_newlines.map {|l| (l && l.split(" ").map{|i| i.unhexlify }) || []}
+          ret += resp[:body].lstrip.split_newlines.map {|l| (l && l.split(" ").map{|i| i.unhexlify }) || []}
         end
+        
         Amp::UI.debug "between returns: #{ret.inspect}"
         ret
       end
@@ -358,10 +359,11 @@ module Amp
       # @option args [String] :data (nil) the POST data to send
       # @option args [Hash] :headers ({}) the headers to send with the request, not including
       #   any authentication or user-agent headers.
-      # @return [Array] the response data, in the form [body, response_code]
+      # @return [Hash<Symbol => String, Integer>] the response data, in the form
+      #   {:body => body, :code => response_code}
       def do_read(command, args={})
         response = do_cmd(command, args)
-        [response.body, response.code.to_i]
+        {:body => response.body, :code => response.code.to_i}
       end
     end
     
