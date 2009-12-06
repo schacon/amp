@@ -1,6 +1,7 @@
 module Amp
   module Repositories
     
+    # make this git-hg-svn-cvs-whatever friendly!
     def self.pick(config, path='', create=false)
       # hot path so we don't load the HTTP repos!
       unless path[0,4] == "http"
@@ -23,70 +24,73 @@ module Amp
     class RepositoryCapabilityError < StandardError; end
     class RepoError < StandardError; end
     
-    ##
-    # = Repository
-    # This is an abstract class that represents a repository.
-    # All repositories must inherit from this class.
-    class Repository
+    module Mercurial
       
       ##
-      # Is this repository capable of the given action/format? Or, if the capability
-      # has a value assigned to it (like "revlog" = "version2"), what is it?
-      # 
-      # @param [String] capability the name of the action/format/what have you that we need to test
-      # @return [Boolean, String] whether or not we support the given capability; or, for
-      #   capabilities that have a value, the string value.
-      def capable?(capability)
-        get_capabilities
-        @capabilities[capability]
-      end
-      
-      ##
-      # No-op, to be implemented by remote repo classes.
-      def get_capabilities; end
-      
-      ##
-      # Raises an exception if we don't have a given capability.
-      # 
-      # @param [String] capability what capability we are requiring
-      # @param [String] purpose why we need it - enhances the output
-      # @raise [RepositoryCapabilityError] if we don't support it, this is raised
-      def require_capability(capability, purpose)
-        get_capabilities
-        raise RepositoryCapabilityError.new(<<-EOF
-        Can't #{purpose}; remote repository doesn't support the #{capability} capability.
-        EOF
-        ) unless @capabilities[capability]
-      end
-      
-      ##
-      # is the repository a local repo?
-      # 
-      # @return [Boolean] is the repository local?
-      def local?
-        false
-      end
-      
-      ##
-      # can we copy files? Only for local repos.
-      # 
-      # @return [Boolean] whether we are able to copy files
-      def can_copy?
-        local?
-      end
-      
-      ##
-      # Joins the given path with our URL. Necessary due to the difference between local
-      # and remote repos.
-      # 
-      # @param [String] path the path we are appending
-      # @return [String] our URL joined with the requested path
-      def add_path(path)
-        myurl = self.url
-        if myurl.end_with? '/'
-          myurl + path
-        else
-          myurl + '/' + path
+      # = Repository
+      # This is an abstract class that represents a repository.
+      # All repositories must inherit from this class.
+      class Repository
+        
+        ##
+        # Is this repository capable of the given action/format? Or, if the capability
+        # has a value assigned to it (like "revlog" = "version2"), what is it?
+        # 
+        # @param [String] capability the name of the action/format/what have you that we need to test
+        # @return [Boolean, String] whether or not we support the given capability; or, for
+        #   capabilities that have a value, the string value.
+        def capable?(capability)
+          get_capabilities
+          @capabilities[capability]
+        end
+        
+        ##
+        # No-op, to be implemented by remote repo classes.
+        def get_capabilities; end
+        
+        ##
+        # Raises an exception if we don't have a given capability.
+        # 
+        # @param [String] capability what capability we are requiring
+        # @param [String] purpose why we need it - enhances the output
+        # @raise [RepositoryCapabilityError] if we don't support it, this is raised
+        def require_capability(capability, purpose)
+          get_capabilities
+          raise RepositoryCapabilityError.new(<<-EOF
+          Can't #{purpose}; remote repository doesn't support the #{capability} capability.
+          EOF
+          ) unless @capabilities[capability]
+        end
+        
+        ##
+        # is the repository a local repo?
+        # 
+        # @return [Boolean] is the repository local?
+        def local?
+          false
+        end
+        
+        ##
+        # can we copy files? Only for local repos.
+        # 
+        # @return [Boolean] whether we are able to copy files
+        def can_copy?
+          local?
+        end
+        
+        ##
+        # Joins the given path with our URL. Necessary due to the difference between local
+        # and remote repos.
+        # 
+        # @param [String] path the path we are appending
+        # @return [String] our URL joined with the requested path
+        def add_path(path)
+          myurl = self.url
+          if myurl.end_with? '/'
+            myurl + path
+          else
+            myurl + '/' + path
+          end
         end
       end
     end
