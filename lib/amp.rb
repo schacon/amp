@@ -74,8 +74,8 @@ module Amp
   end
   
   module Graphs
+    autoload :AncestorCalculator,      "amp/graphs/ancestor.rb"
     module Mercurial
-      autoload :AncestorCalculator,      "amp/graphs/mercurial/ancestor.rb"
       autoload :CopyCalculator,          "amp/graphs/mercurial/copies.rb"
     end
   end                                      

@@ -27,6 +27,61 @@ module Amp
   # Methods here rely on certain base methods that are unimplemented,
   # left as an exercise for the reader.
   class AbstractRepository
+    class AbstractLocalRepository
+      ##
+      # Returns the staging area for the repository, which provides the ability to add/remove
+      # files in the next commit.
+      # Returns a subclass of AbstractStagingArea
+      def staging_area()
+      
+      ##
+      # Creates a local changeset.
+      # Returns boolean for success/failure
+      def commit(options = {})
+      
+      ##
+      # Pushes changesets to a remote repository.
+      # Returns boolean for success/failure
+      def push(options = {})
+      
+      ##
+      # Pulls changesets from a remote repository 
+      # Does *not* apply them to the working directory.
+      # Returns boolean for success/failure
+      def pull(options = {})
+      
+      ##
+      # Returns a changeset for the given revision.
+      # Must support at least integer indexing as well as a string "node ID", if the repository
+      # system has such IDs. Also "tip" should return the tip of the revision tree.
+      # Returns an AbstractChangeset
+      def [](revision)
+      
+      ##
+      # Returns the number of changesets in the repository.
+      # Returns Integer
+      def size
+      
+      ##
+      # Gets a given file at the given revision, in the form of an AbstractVersionedFile object.
+      # Returns AbstractVersionedFile
+      def get_file(file, revision)
+      
+      ##
+      # In whatever conflict-resolution system your repository format defines, mark a given file
+      # as in conflict. If your format does not manage conflict resolution, re-define this method as
+      # a no-op.
+      # Returns boolean
+      def mark_conflicted(*filenames)
+      
+      ##
+      # In whatever conflict-resolution system your repository format defines, mark a given file
+      # as no longer in conflict (resolved). If your format does not manage conflict resolution,
+      # re-define this method as a no-op.
+      # Returns boolean
+      def mark_resolved(*filenames)
+    end
+    
   end
   
 end # module Amp
