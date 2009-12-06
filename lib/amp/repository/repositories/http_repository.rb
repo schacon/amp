@@ -310,7 +310,10 @@ module Amp
         when Net::HTTPRedirection
           # Redirect to a new URL - grab the new URL...
           newurl = response["Location"]
-          @url = URI.parse(newurl)
+          @url          = URI.parse newurl
+          @url.user     = @username # Keep the old username/password combination.
+          @url.password = @password # Keep the old username/password combination.
+          
           # and try that again.
           do_cmd(command, args)
         when Net::HTTPUnauthorized
