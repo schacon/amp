@@ -161,6 +161,7 @@ module Amp
       def [](index)
         @index[index]
       end
+      
       ##
       # This method writes the index to file. Pretty 1337h4><.
       #
