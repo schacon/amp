@@ -20,7 +20,6 @@ require 'stringio'
 
 local_start = Time.now
 
-
 ###############
 # The Amp Magic
 ###############

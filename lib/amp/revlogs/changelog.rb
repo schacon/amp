@@ -294,9 +294,7 @@ module Amp
       extra["branch"] = "default" unless extra["branch"]
       
       files = l[3..-1]
-      
-      #puts(">> Ari's tipmost changeset: "+[manifest, user, [time, timezone], files, desc, extra].inspect) #killme
-      
+            
       [manifest, user, [time, timezone], files, desc, extra]
     end
     

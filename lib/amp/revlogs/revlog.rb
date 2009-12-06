@@ -68,7 +68,6 @@ module Amp
       if idx.is_a? String
         return @index[@index.node_map[idx]]
       elsif idx.is_a? Array
-        STDERR.puts idx.inspect # KILLME
         idx
       else
         return @index[idx]
@@ -575,18 +574,6 @@ module Amp
         data_file = open(@index_file) if @index.inline?
         data_file = open(@data_file)  unless @index.inline?
       end
-      
-      # data_file.seek(start, IO::SEEK_SET)
-      # sz = data_file.read.length
-      # data_file.seek(0, IO::SEEK_SET)
-      # $zs = data_file.read.length
-      # puts(@index.inline? ? "------- INLINE" : "-------NOT INLINE") #killme
-      # puts "------- CACHE_LENGTH = #{cache_length}" # KILLME
-      # puts "===" # KILLME
-      # puts "We are going to read #{cache_length} bytes starting at #{start}" # KILLME
-      # puts "Wait a minute... on Ari's machine, there's only #{sz} bytes to read..." # KILLME
-      # puts "Filesize: #{$zs}" # KILLME
-      # puts "===" # KILLME
       
       data_file.seek(start, IO::SEEK_SET)
       @chunk_cache = [start, data_file.read(cache_length)]

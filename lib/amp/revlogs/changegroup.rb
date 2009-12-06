@@ -180,8 +180,6 @@ module Amp
           # For each chunk in the changegroup (i.e. each changeset)
           inner_count = 0
           self.each_chunk(changegroup) do |chunk|
-            
-            #puts "\t\twrite_bundle inner loop count #{inner_count}"
             inner_count += 1
             empty = false
             # Compress the chunk header

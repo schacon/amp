@@ -1,7 +1,7 @@
 module Amp
   class StandardErrorReporter
     def self.report str
-      STDERR.puts str
+      UI.err str
     end
   end
   
