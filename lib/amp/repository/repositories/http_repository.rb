@@ -209,7 +209,7 @@ module Amp
         end
         
         # output any text from the server
-        UI::say output
+        UI::status output
         # return 1 for success, 0 for failure
         resp_code.to_i
       end
