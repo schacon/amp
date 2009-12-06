@@ -23,7 +23,7 @@ local_start = Time.now
 alias old_puts puts
 def puts(*args)
   return if args.empty?
-  old_puts (['[', caller[0].inspect, ' -- ', *args] << ']').join
+  old_puts (['[', caller[2].inspect, ' -- ', *args] << ']').join
 end
 
 alias old_p p
