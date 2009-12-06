@@ -23,7 +23,7 @@ module Amp
     #
     class Revlog
       include Enumerable
-      include RevlogSupport::Node
+      include RevlogSupport::Mercurial::Node
       
       # the file paths to the index and data files
       attr_reader :index_file, :data_file
@@ -41,13 +41,13 @@ module Amp
         @index_file = indexfile
         @data_file  = indexfile[0..-3] + ".d"
         @chunk_cache = nil
-        @index = RevlogSupport::Index.parse(opener, indexfile)
+        @index = RevlogSupport::Mercurial::Index.parse(opener, indexfile)
         
         # add the null, terminating index entry if it isn't already there
-        if @index.index.empty? || @index.is_a?(RevlogSupport::LazyIndex) || 
+        if @index.index.empty? || @index.is_a?(RevlogSupport::Mercurial::LazyIndex) || 
                                  @index.index[-1].node_id.not_null?
           # the use of @index.index is deliberate!
-          @index.index << RevlogSupport::IndexEntry.new(0,0,0,-1,-1,-1,-1,NULL_ID)
+          @index.index << RevlogSupport::Mercurial::IndexEntry.new(0,0,0,-1,-1,-1,-1,NULL_ID)
         end
         
       end

@@ -97,6 +97,8 @@ module Amp
       autoload :HTTPSRepository,         "amp/repository/mercurial/repositories/http_repository.rb"
       autoload :LocalRepository,         "amp/repository/mercurial/repositories/local_repository.rb"
       autoload :Lock,                    "amp/repository/mercurial/lock.rb"
+      autoload :Picker,                  "amp/repository/mercurial/repository.rb"
+      autoload :Repository,              "amp/repository/mercurial/repository.rb"
       autoload :Stores,                  "amp/repository/mercurial/store.rb"
       autoload :TagManager,              "amp/repository/mercurial/tag_manager.rb"
       autoload :Updatable,               "amp/repository/mercurial/updatable.rb"

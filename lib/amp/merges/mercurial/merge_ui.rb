@@ -9,6 +9,7 @@ module Amp
       # preferences. It is mixed into the UI class. The UI class must implement
       # the "config" method.
       module MergeUI
+        extend self
         
         ##
         # Performs a 3-way merge in the working directory from vf_local to vf_other,

@@ -9,7 +9,7 @@ module Amp
       # More seriously, this class handles reading/writing to the branch cache
       # and figuring out what the head revisions are for each branch and such.
       module BranchManager
-        include Amp::RevlogSupport::Node
+        include RevlogSupport::Mercurial::Node
         
         ##
         # Saves the branches with the given "partial" and the last_rev index.

@@ -109,7 +109,7 @@ module Amp
             working_file  = working_changeset[dirty_file]
             other_file    = other_changeset[ofile]
             ancestor_file = @repo.versioned_file(afile, :file_id => anode)
-            r = UI.file_merge(@repo, @local, lfile, working_file, other_file, ancestor_file)
+            r = MergeUI.file_merge(@repo, @local, lfile, working_file, other_file, ancestor_file)
           end
           
           mark(dirty_file, "r") if r.nil? || r == false

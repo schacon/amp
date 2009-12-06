@@ -32,8 +32,10 @@ module Amp
       class IndexEntry < Struct.new(:offset_flags, :compressed_len, :uncompressed_len, :base_rev,
                                     :link_rev, :parent_one_rev, :parent_two_rev, :node_id)
         include Comparable
+        
         INDEX_FORMAT_NG = "Q NNNNNN a20 x12"
         BLOCK_SIZE = 64
+        
         def initialize(*args)
           if args.size == 1 && args[0].respond_to?(:read)
             super(*(args[0].read(BLOCK_SIZE).unpack(INDEX_FORMAT_NG)))
@@ -83,7 +85,7 @@ module Amp
       # the class will figure out which version it is, and all that jazz.
       #
       class Index
-        include Amp::RevlogSupport::Support
+        include RevlogSupport::Mercurial::Support
         include Enumerable
         
         # This is the packed format of the version number of the index.

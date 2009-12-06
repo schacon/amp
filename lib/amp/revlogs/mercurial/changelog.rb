@@ -152,7 +152,7 @@ module Amp
     # example during merges that might fail. So we have to actually have
     # a real Opener and a fake one, which will save the data in memory.
     # When you call #finalize, the fake file will replace the real deal.
-    class ChangeLog < Amp::Revlog
+    class ChangeLog < Revlog
       attr_accessor :delay_count, :delay_name, :index_file, :delay_buffer, :node_map
       
       ##

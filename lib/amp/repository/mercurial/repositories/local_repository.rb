@@ -9,11 +9,11 @@ module Amp
       # as your working directory. This makes it pretty damn important, and also
       # pretty damn complicated. Have fun!
       class LocalRepository < Repository
-        include Amp::RevlogSupport::Node
-        include Amp::Repositories::BranchManager
-        include Amp::Repositories::TagManager
-        include Amp::Repositories::Updatable
-        include Amp::Repositories::Verification
+        include RevlogSupport::Mercurial::Node
+        include Repositories::Mercurial::BranchManager
+        include Repositories::Mercurial::TagManager
+        include Repositories::Mercurial::Updatable
+        include Repositories::Mercurial::Verification
         
         # The config is an {AmpConfig} for this repo (and uses .hg/hgrc)
         attr_accessor :config
@@ -154,10 +154,10 @@ module Amp
         #   id. Could be working directory.
         def [](rev)
           if rev.nil?
-            return WorkingDirectoryChangeset.new(self)
+            return Amp::Mercurial::WorkingDirectoryChangeset.new(self)
           end
           rev = rev.to_i if rev.to_i.to_s == rev
-          return Changeset.new(self, rev)
+          return Amp::Mercurial::Changeset.new(self, rev)
         end
         
         ##
@@ -342,7 +342,7 @@ module Amp
         def changelog
           return @changelog if @changelog
           
-          @changelog = ChangeLog.new @store.opener
+          @changelog = Amp::Mercurial::ChangeLog.new @store.opener
           
           if path = ENV['HG_PENDING']
             if path =~ /^#{root}/
@@ -372,7 +372,7 @@ module Amp
           return @manifest if @manifest
           
           changelog #load the changelog
-          @manifest = Manifest.new @store.opener
+          @manifest = Amp::Mercurial::Manifest.new @store.opener
         end
         
         ##
@@ -1935,8 +1935,8 @@ module Amp
           
           match = Match.create({}) { true } unless match
           
-          node1 = self[node1] unless node1.kind_of? Changeset # get changeset objects
-          node2 = self[node2] unless node2.kind_of? Changeset
+          node1 = self[node1] unless node1.kind_of? Amp::Mercurial::Changeset # get changeset objects
+          node2 = self[node2] unless node2.kind_of? Amp::Mercurial::Changeset
           
           write_dirstate = false
           

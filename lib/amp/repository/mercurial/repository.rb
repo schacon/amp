@@ -1,36 +1,44 @@
 module Amp
   module Repositories
-    
-    # make this git-hg-svn-cvs-whatever friendly!
-    def self.pick(config, path='', create=false)
-      # hot path so we don't load the HTTP repos!
-      unless path[0,4] == "http"
-        return LocalRepository.new(find_repo(path), create, config)
-      end
-      return HTTPSRepository.new(path, create, config) if path[0,5] == "https"
-      return HTTPRepository.new(path, create, config)  if path[0,4] == "http"
-    end
-    
-    def self.find_repo path
-      while !(File.directory?(File.join(path, ".hg")))
-        old_path, path = path, File.dirname(path)
-        if path == old_path
-          raise "No Repository Found"
-        end
-      end
-      path
-    end
-    
     class RepositoryCapabilityError < StandardError; end
-    class RepoError < StandardError; end
     
     module Mercurial
       
       ##
+      # This module is necessary so that we have a hook for autoload.
+      # It is quite unfortunate, really, because the one public method
+      # that this module provides could easily belong to Mercurial.
+      # But it doesn't. C'est la vie.
+      module Picker
+        
+        def self.pick(config, path='', create=false)
+          # hot path so we don't load the HTTP repos!
+          unless path[0,4] == "http"
+            return LocalRepository.new(find_repo(path), create, config)
+          end
+          return HTTPSRepository.new(path, create, config) if path[0,5] == "https"
+          return HTTPRepository.new(path, create, config)  if path[0,4] == "http"
+        end
+        
+        ################################
+        private
+        ################################
+        def self.find_repo path
+          while !(File.directory?(File.join(path, ".hg")))
+            old_path, path = path, File.dirname(path)
+            if path == old_path
+              raise "No Repository Found"
+            end
+          end
+          path
+        end
+      end
+      
+      ##
       # = Repository
-      # This is an abstract class that represents a repository.
+      # This is an abstract class that represents a repository for Mercurial.
       # All repositories must inherit from this class.
-      class Repository
+      class Repository < AbstractRepository
         
         ##
         # Is this repository capable of the given action/format? Or, if the capability
