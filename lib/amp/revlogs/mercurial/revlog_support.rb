@@ -1,3 +1,5 @@
+require 'zlib'
+
 module Amp
   module RevlogSupport
     module Mercurial

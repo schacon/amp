@@ -84,7 +84,7 @@ module Amp
         template = opts[:template]
         template = "default-#{type}" if (template.nil? || template.to_s == "default")
     
-        template = Support::Template[template]
+        template = Support::Template['mercurial', template]
         template.render({}, binding)
       end
       

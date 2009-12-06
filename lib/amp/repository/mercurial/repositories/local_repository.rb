@@ -266,7 +266,7 @@ module Amp
         # @return [FileLog] a filelog (a type of revision log) for the given file
         def file(f)
           f = f[1..-1] if f[0, 1] == "/"
-          FileLog.new @store.opener, f
+          Amp::Mercurial::FileLog.new @store.opener, f
         end
         
         ##
@@ -289,7 +289,7 @@ module Amp
         # @option [String, Integer] opts file_id (nil) the revision # or node ID of
         #   into the file_log
         def versioned_file(path, opts={})
-          VersionedFile.new(self, path, opts)
+          Amp::Mercurial::VersionedFile.new(self, path, opts)
         end
         
         ##
@@ -2186,7 +2186,7 @@ module Amp
             end
             
             
-            merge_state = Amp::Merges::MergeState.new self # merge state!
+            merge_state = Amp::Merges::Mercurial::MergeState.new self # merge state!
             
             changes[:modified].each do |file|
               if merge_state[file] && merge_state[file] == "u"
@@ -2194,12 +2194,12 @@ module Amp
               end
             end
             
-            changeset = WorkingDirectoryChangeset.new self, :parents => [p1, p2]      ,
-                                                            :text    => opts[:message],
-                                                            :user    => opts[:user]   ,
-                                                            :date    => opts[:date]   ,
-                                                            :extra   => opts[:extra]  ,
-                                                            :changes => changes
+            changeset = Amp::Mercurial::WorkingDirectoryChangeset.new self, :parents => [p1, p2]      ,
+                                                                            :text    => opts[:message],
+                                                                            :user    => opts[:user]   ,
+                                                                            :date    => opts[:date]   ,
+                                                                            :extra   => opts[:extra]  ,
+                                                                            :changes => changes
               
             revision = commit_changeset changeset, :force           => opts[:force]       ,
                                                    :force_editor    => opts[:force_editor],
@@ -2263,7 +2263,7 @@ module Amp
           xp2 = (p2 == NULL_ID) ? "" : p2.hexlify
           
           run_hook :pre_commit
-          journal = Journal.new
+          journal = Amp::Mercurial::Journal.new
     
           fresh    = {} # new = reserved haha
           changed  = []

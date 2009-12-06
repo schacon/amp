@@ -82,7 +82,7 @@ module Amp
       # @return [String] the node's ID
       def node_id_for_index(index)
         unless @index[index]
-          raise RevlogSupport::LookupError.new("Couldn't find node for id #{index.inspect}")
+          raise RevlogSupport::Mercurial::LookupError.new("Couldn't find node for id #{index.inspect}")
         end
         @index[index].node_id
       end
@@ -149,7 +149,7 @@ module Amp
       ##
       # Returns the offset where the data begins for the revision at _index_.
       def data_start_for_index(index)
-        result = RevlogSupport::Support.get_offset self[index].offset_flags
+        result = RevlogSupport::Mercurial::Support.get_offset self[index].offset_flags
         if Amp::Support::SYSTEM[:endian] == :big
           result = result.byte_swap_64
         end
@@ -543,7 +543,7 @@ module Amp
         nl = @index.node_map.keys.select {|k| k[0..(l-1)] == bin_id}
         nl = nl.select {|n| n.hexlify =~ /^#{id}/}
         return nl.first if nl.size == 1
-        raise RevlogSupport::LookupError.new("ambiguous ID #{id}") if nl.size > 1
+        raise RevlogSupport::Mercurial::LookupError.new("ambiguous ID #{id.inspect}") if nl.size > 1
         nil
       end
       
@@ -555,7 +555,7 @@ module Amp
         return n unless n.nil?
         n = partial_id_match id
         return n unless n.nil?
-        raise RevlogSupport::LookupError.new("no match found #{id}")
+        raise RevlogSupport::Mercurial::LookupError.new("no match found #{id.inspect}")
       end
       
       ##
@@ -564,7 +564,7 @@ module Amp
       def cmp(node, text)
         
         p1, p2 = parents_for_node node
-        return RevlogSupport::Support.history_hash(text, p1, p2) != node
+        return RevlogSupport::Mercurial::Support.history_hash(text, p1, p2) != node
       end
       
       ##
@@ -622,14 +622,14 @@ module Amp
         return "" if c.nil? || c.empty? || length == 0
         c = c[offset..(offset + length - 1)] if cache_length != length
         
-        RevlogSupport::Support.decompress c
+        RevlogSupport::Mercurial::Support.decompress c
       end
       
       ##
       # Unified diffs 2 revisions, based on their indices. They are returned in a sexified
       # unified diff format.
       def unified_revision_diff(rev1, rev2)
-        Diffs::MercurialDiff.unified_diff( decompress_revision(self.node_id_for_index(rev1)),
+        Diffs::Mercurial::MercurialDiff.unified_diff( decompress_revision(self.node_id_for_index(rev1)),
                                         decompress_revision(self.node_id_for_index(rev2)))
       end
       
@@ -643,7 +643,7 @@ module Amp
       def revision_diff(rev1, rev2)
         return get_chunk(rev2) if (rev1 + 1 == rev2) && 
                self[rev1].base_rev == self[rev2].base_rev
-        Diffs::MercurialDiff.text_diff( decompress_revision(node_id_for_index(rev1)),
+        Diffs::Mercurial::MercurialDiff.text_diff( decompress_revision(node_id_for_index(rev1)),
                                         decompress_revision(node_id_for_index(rev2)))
       end
       
@@ -663,7 +663,7 @@ module Amp
         base = @index[rev].base_rev
         
         if @index[rev].offset_flags & 0xFFFF  > 0
-          raise RevlogSupport::RevlogError.new("incompatible revision flag %x" %
+          raise RevlogSupport::Mercurial::RevlogError.new("incompatible revision flag %x" %
                                           (self.index[rev].offset_flags & 0xFFFF))
         end
         data_file = nil
@@ -676,11 +676,11 @@ module Amp
         data_file = open(@data_file) if !(@index.inline?) && rev > base + 1
         text = get_chunk(base, data_file) if text.nil?
         bins = ((base + 1)..rev).map {|r| get_chunk(r, data_file)}
-        text = Diffs::MercurialPatch.apply_patches(text, bins)
+        text = Diffs::Mercurial::MercurialPatch.apply_patches(text, bins)
         
         p1, p2 = parents_for_node node
-        if node != RevlogSupport::Support.history_hash(text, p1, p2)
-          raise RevlogSupport::RevlogError.new("integrity check failed on %s:%d, data:%s" % 
+        if node != RevlogSupport::Mercurial::Support.history_hash(text, p1, p2)
+          raise RevlogSupport::Mercurial::RevlogError.new("integrity check failed on %s:%d, data:%s" % 
                                                [(@index.inline? ? @index_file : @data_file), rev, text.inspect])
         end
         @index.cache = [node, rev, text]
@@ -704,7 +704,7 @@ module Amp
         
         trinfo = tr.find(@index_file)
         if trinfo.nil?
-          raise RevlogSupport::RevlogError.new("#{@index_file} not found in the"+
+          raise RevlogSupport::Mercurial::RevlogError.new("#{@index_file} not found in the"+
                                                "transaction")
         end
         trindex = trinfo[:data]
@@ -728,7 +728,7 @@ module Amp
         fp.close
         
         open(@index_file, 'w') do |fp| # automatically atomic
-          @version &= ~ RevlogSupport::Support::REVLOG_NG_INLINE_DATA
+          @version &= ~ RevlogSupport::Mercurial::Support::REVLOG_NG_INLINE_DATA
           @inline   = false
           each do |i|
             e = @index.pack_entry @index[i], @version
@@ -751,7 +751,7 @@ module Amp
       # @param d an optional precomputed delta
       # @return [String] the digest ID referring to the node in the log
       def add_revision(text, journal, link, p1, p2, d=nil, index_file_handle=nil)
-        node = RevlogSupport::Support.history_hash(text, p1, p2)
+        node = RevlogSupport::Mercurial::Support.history_hash(text, p1, p2)
         return node if @index.node_map[node]
         curr = index_size
         prev = curr - 1
@@ -761,21 +761,21 @@ module Amp
         if curr > 0
           if d.nil? || d.empty?
             ptext = decompress_revision node_id_for_index(prev)
-            d = Diffs::MercurialDiff.text_diff(ptext, text)
+            d = Diffs::Mercurial::MercurialDiff.text_diff(ptext, text)
           end
-          data = RevlogSupport::Support.compress d
+          data = RevlogSupport::Mercurial::Support.compress d
           len = data[:compression].size + data[:text].size
           dist = len + offset - data_start_for_index(base)
         end
         
         # Compressed diff > size of actual file
         if curr == 0 || dist > text.size * 2
-          data = RevlogSupport::Support.compress text
+          data = RevlogSupport::Mercurial::Support.compress text
           len = data[:compression].size + data[:text].size
           base = curr
         end
         
-        entry = RevlogSupport::IndexEntry.new(RevlogSupport::Support.offset_version(offset, 0), 
+        entry = RevlogSupport::Mercurial::IndexEntry.new(RevlogSupport::Mercurial::Support.offset_version(offset, 0), 
                   len, text.size, base, link, rev(p1), rev(p2), node)
                   
         offset += curr * @index.entry_size
@@ -794,7 +794,7 @@ module Amp
         parent_func = proc do |rev| 
           self.parent_indices_for_index(rev).select {|i| i != NULL_REV }
         end
-        c = Graphs::AncestorCalculator.ancestors(revision_index_for_node(a),
+        c = Graphs::Mercurial::AncestorCalculator.ancestors(revision_index_for_node(a),
                                                  revision_index_for_node(b),
                                                  parent_func)
         return NULL_ID if c.nil?
@@ -818,7 +818,7 @@ module Amp
     
         # if we don't have any revisions touched by these changesets, bail
         if revs.empty?
-          yield RevlogSupport::ChangeGroup.closing_chunk
+          yield RevlogSupport::Mercurial::ChangeGroup.closing_chunk
           return
         end
         
@@ -838,13 +838,13 @@ module Amp
           
           if a == -1
             data = decompress_revision nb
-            meta += Diffs::MercurialDiff.trivial_diff_header(d.size)
+            meta += Diffs::Mercurial::MercurialDiff.trivial_diff_header(d.size)
           else
             
             data = revision_diff(a, b)
           end
           
-          yield RevlogSupport::ChangeGroup.chunk_header(meta.size + data.size)
+          yield RevlogSupport::Mercurial::ChangeGroup.chunk_header(meta.size + data.size)
           yield meta
           if data.size > 1048576
             pos = 0
@@ -857,7 +857,7 @@ module Amp
             yield data
           end
         end
-        yield RevlogSupport::ChangeGroup.closing_chunk
+        yield RevlogSupport::Mercurial::ChangeGroup.closing_chunk
       end
       
       # Adds a changelog to the index
@@ -870,7 +870,7 @@ module Amp
         t = r - 1
         node = nil
         
-        base = prev = RevlogSupport::Node::NULL_REV
+        base = prev = RevlogSupport::Mercurial::Node::NULL_REV
         start = endpt = text_len = 0
         endpt = data_end_for_index t if r != 0
         
@@ -888,7 +888,7 @@ module Amp
         begin #errors abound here i guess
           chain = nil
           
-          Amp::RevlogSupport::ChangeGroup.each_chunk(revisions) do |chunk|
+          RevlogSupport::Mercurial::ChangeGroup.each_chunk(revisions) do |chunk|
             node, parent1, parent2, cs = chunk[0..79].unpack("a20a20a20a20")
             link = link_mapper.call(cs)
             
@@ -899,7 +899,7 @@ module Amp
             delta = chunk[80..-1]
             [parent1, parent2].each do |parent|
               unless @index.node_map[parent]
-                raise RevlogSupport::LookupError.new("unknown parent #{parent}"+
+                raise RevlogSupport::Mercurial::LookupError.new("unknown parent #{parent}"+
                                                            " in #{@index_file}")
               end
             end
@@ -907,15 +907,15 @@ module Amp
             unless chain
               chain = parent1
               unless @index.node_map[chain]
-                raise RevlogSupport::LookupError.new("unknown parent #{chain}"+
+                raise RevlogSupport::Mercurial::LookupError.new("unknown parent #{chain}"+
                                             " from #{chain} in #{@index_file}")
               end
             end
             
             if chain == prev
-              cdelta = RevlogSupport::Support.compress delta
+              cdelta = RevlogSupport::Mercurial::Support.compress delta
               cdeltalen = cdelta[:compression].size + cdelta[:text].size
-              text_len = Diffs::MercurialPatch.patched_size text_len, delta
+              text_len = Diffs::Mercurial::MercurialPatch.patched_size text_len, delta
             end
             
             if chain != prev || (endpt - start + cdeltalen) > text_len * 2
@@ -926,18 +926,18 @@ module Amp
               if text.size == 0
                 text = delta[12..-1]
               else
-                text = Diffs::MercurialPatch.apply_patches(text, [delta])
+                text = Diffs::Mercurial::MercurialPatch.apply_patches(text, [delta])
               end
               chk = add_revision(text, journal, link, parent1, parent2, 
                                     nil, index_file_handle)
               
               if chk != node
-                raise RevlogSupport::RevlogError.new("consistency error "+
+                raise RevlogSupport::Mercurial::RevlogError.new("consistency error "+
                           "adding group")
               end
               text_len = text.size
             else
-              entry = RevlogSupport::IndexEntry.new(RevlogSupport::Support.offset_version(endpt, 0),
+              entry = RevlogSupport::Mercurial::IndexEntry.new(RevlogSupport::Support.offset_version(endpt, 0),
                          cdeltalen,text_len, base, link, rev(parent1), rev(parent2), node)
               @index << entry
               @index.node_map[node] = r
@@ -967,7 +967,7 @@ module Amp
       def strip(min_link)
         return if size == 0
         
-        load_index_map if @index.is_a? RevlogSupport::LazyIndex
+        load_index_map if @index.is_a? RevlogSupport::Mercurial::LazyIndex
         
         rev = 0
         all_indices.each {|_rev| rev = _rev; break if @index[rev].link_rev >= min_link }
