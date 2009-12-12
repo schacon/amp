@@ -53,7 +53,7 @@ module Amp
       # end
       class DirState
         include Amp::Mercurial::Ignore
-        include RevlogSupport::Mercurial::Node
+        include Amp::Mercurial::RevlogSupport::Node
       
         UNKNOWN = DirStateEntry.new(:untracked, 0, 0, 0)
         FORMAT  = "cNNNN"

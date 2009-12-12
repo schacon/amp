@@ -6,7 +6,7 @@ module Amp
       # This module contains all the code that makes a repository able to
       # update its working directory.
       module Updatable
-        include RevlogSupport::Mercurial::Node
+        include Amp::Mercurial::RevlogSupport::Node
         
         ##
         # Updates the repository to the given node. One of the major operations on a repository.

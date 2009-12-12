@@ -38,7 +38,7 @@ module Amp
       # = Repository
       # This is an abstract class that represents a repository for Mercurial.
       # All repositories must inherit from this class.
-      class Repository < AbstractRepository
+      class Repository < AbstractLocalRepository
         
         ##
         # Is this repository capable of the given action/format? Or, if the capability

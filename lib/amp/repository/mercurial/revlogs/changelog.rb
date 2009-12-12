@@ -232,7 +232,7 @@ module Amp
       ##
       # Does a check on our size, but knows enough to quit if we're still in
       # delayed-writing mode.
-      # @param [Amp::Journal] journal the journal to use to keep track of our transaction
+      # @param [Amp::Mercurial::Journal] journal the journal to use to keep track of our transaction
       # @param [File] fp the file pointer to use to check our size
       def check_inline_size(journal, fp=nil)
         return if @opener.is_a? DelayedOpener
@@ -303,10 +303,10 @@ module Amp
       # Adds the given commit to the changelog.
       # 
       # @todo Handle text encodings
-      # @param [Amp::Manifest] Manifest a hex-version of a node_id or something?
+      # @param [Amp::Mercurial::Manifest] Manifest a hex-version of a node_id or something?
       # @param [String] files the files relevant to the commit, to be included
       # @param [String] desc the commit message from the user
-      # @param [Amp::Journal] journal the transaction journal to write to for rollbacks if
+      # @param [Amp::Mercurial::Journal] journal the transaction journal to write to for rollbacks if
       #   something goes horribly wrong
       # @param [String] p1 the first parent of this node
       # @param [String] p2 the second parent of this node

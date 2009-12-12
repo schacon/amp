@@ -1,6 +1,5 @@
 module Amp
   module Mercurial
-    
     ##
     # = FileLog
     # A FileLog is the revision log that stores revision history for

@@ -14,7 +14,7 @@ class TestDirState < Test::Unit::TestCase
     @config = PythonConfig::ConfigParser.new f
     opener = Amp::Opener.new File.expand_path(File.dirname(__FILE__))
     opener.default = :open_file
-    @state = Amp::Repositories::DirState.new File.expand_path(File.dirname(__FILE__)), @config, opener
+    @state = Amp::Repositories::Mercurial::DirState.new File.expand_path(File.dirname(__FILE__)), @config, opener
     @files = []
   end
   
@@ -174,7 +174,7 @@ class TestDirState < Test::Unit::TestCase
     
     @state.send :read!
     
-    assert_equal({"oh_nuit" => Amp::Repositories::DirStateEntry.new(:added, 0, -1, -1)}, @state.files)
+    assert_equal({"oh_nuit" => Amp::Repositories::Mercurial::DirStateEntry.new(:added, 0, -1, -1)}, @state.files)
     assert_equal({}, @state.copy_map)
   end
 

@@ -8,7 +8,7 @@ class TestLocalRepo < Test::Unit::TestCase
   
   def setup
     @config = Amp::AmpConfig.new
-    @repo = Amp::Repositories::LocalRepository.new(EXISTING_REPO_PATH, false, @config)
+    @repo = Amp::Repositories::Mercurial::LocalRepository.new(EXISTING_REPO_PATH, false, @config)
   end
   
   def join(*args)
@@ -24,7 +24,7 @@ class TestLocalRepo < Test::Unit::TestCase
   end
     
     def test_create_repo
-      Amp::Repositories::LocalRepository.new(REPO_PATH, true, @config)
+      Amp::Repositories::Mercurial::LocalRepository.new(REPO_PATH, true, @config)
       assert File.directory?(join(".hg"))
       assert File.exists?(hg_join("00changelog.i"))
       assert File.exists?(hg_join("requires"))

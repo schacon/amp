@@ -58,9 +58,7 @@ module Amp
   end
   
   module Encoding
-    module Mercurial
-      autoload :Base85,                  "amp/encoding/mercurial/base85.rb"
-    end
+    autoload :Base85,                  "amp/encoding/base85.rb"
   end                                      
                                            
   module Diffs
@@ -74,7 +72,7 @@ module Amp
   end
   
   module Graphs
-    autoload :AncestorCalculator,      "amp/graphs/ancestor.rb"
+    autoload :AncestorCalculator,        "amp/graphs/ancestor.rb"
     module Mercurial
       autoload :CopyCalculator,          "amp/graphs/mercurial/copies.rb"
     end
@@ -106,8 +104,9 @@ module Amp
     end
   end
   
-  module RevlogSupport
-    module Mercurial
+  
+  module Mercurial
+    module RevlogSupport
       autoload :ChangeGroup,             "amp/repository/mercurial/revlogs/changegroup.rb"
       autoload :Index,                   "amp/repository/mercurial/revlogs/index.rb"
       autoload :IndexInlineNG,           "amp/repository/mercurial/revlogs/index.rb"
@@ -119,17 +118,17 @@ module Amp
   end
   
   module Servers
-    autoload :FancyHTTPServer,         "amp/server/fancy_http_server.rb"
-    autoload :HTTPServer,              "amp/server/http_server.rb"
-    autoload :HTTPAuthorizedServer,    "amp/server/http_server.rb"
-    autoload :RepoUserManagement,      "amp/server/repo_user_management.rb"
-    autoload :User,                    "amp/server/amp_user.rb"
-  end
-  
-  module Support
-    autoload :Logger,                  "amp/support/logger.rb"
-    autoload :MultiIO,                 "amp/support/multi_io.rb"
-    autoload :Template,                "amp/templates/template.rb"
+    autoload :FancyHTTPServer,           "amp/server/fancy_http_server.rb"
+    autoload :HTTPServer,                "amp/server/http_server.rb"
+    autoload :HTTPAuthorizedServer,      "amp/server/http_server.rb"
+    autoload :RepoUserManagement,        "amp/server/repo_user_management.rb"
+    autoload :User,                      "amp/server/amp_user.rb"
+  end                                    
+                                         
+  module Support                         
+    autoload :Logger,                    "amp/support/logger.rb"
+    autoload :MultiIO,                   "amp/support/multi_io.rb"
+    autoload :Template,                  "amp/templates/template.rb"
   end
 end
 
