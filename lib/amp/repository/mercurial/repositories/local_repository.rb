@@ -599,7 +599,7 @@ module Amp
             UI::status 'adding file changes'
             
             loop do
-              f = Amp::RevlogSupport::ChangeGroup.get_chunk source
+              f = Amp::Mercurial::RevlogSupport::ChangeGroup.get_chunk source
               break if f.empty?
               
               UI::debug "adding #{f} revisions"

@@ -16,7 +16,7 @@ module Amp
     # a (possibly zlib-compressed) diff.
     #
     # There are two versions of revision logs - version 0 and version NG.
-    # This information is handled by the {Amp::RevlogSupport:Index} classes.
+    # This information is handled by the {Amp::Mercurial::RevlogSupport:Index} classes.
     #
     # Sometimes the data is stored in a separate file from the index. This
     # is up to the system to decide.
@@ -188,7 +188,7 @@ module Amp
       end
       
       ##
-      # Returns each revision as a {Amp::RevlogSupport::IndexEntry}.
+      # Returns each revision as a {Amp::Mercurial::RevlogSupport::IndexEntry}.
       # Don't iterate over the extra revision -1!
       def each(&b); @index[0..-2].each(&b); end
       

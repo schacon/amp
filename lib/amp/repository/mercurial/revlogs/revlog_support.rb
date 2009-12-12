@@ -1,8 +1,8 @@
 require 'zlib'
 
 module Amp
-  module RevlogSupport
-    module Mercurial
+  module Mercurial
+    module RevlogSupport
       
       class RevlogError < StandardError; end
       class LookupError < StandardError; end

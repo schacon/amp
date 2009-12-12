@@ -33,17 +33,17 @@ class TestDirState < Test::Unit::TestCase
   end
   
   def test_parents_equals
-    @state.parents = ["asdfasdf", Amp::RevlogSupport::Node::NULL_ID]
+    @state.parents = ["asdfasdf", Amp::Mercurial::RevlogSupport::Node::NULL_ID]
     
-    assert_equal ["asdfasdf", Amp::RevlogSupport::Node::NULL_ID], @state.parents
+    assert_equal ["asdfasdf", Amp::Mercurial::RevlogSupport::Node::NULL_ID], @state.parents
     
     @state.parents = "asdfasdf"
     
-    assert_equal ["asdfasdf", Amp::RevlogSupport::Node::NULL_ID], @state.parents
+    assert_equal ["asdfasdf", Amp::Mercurial::RevlogSupport::Node::NULL_ID], @state.parents
   end
   
   def test_dirty?
-    @state.parents = ["asdfasdf", Amp::RevlogSupport::Node::NULL_ID] # something to dirty it up
+    @state.parents = ["asdfasdf", Amp::Mercurial::RevlogSupport::Node::NULL_ID] # something to dirty it up
     
     assert @state.dirty?
   end

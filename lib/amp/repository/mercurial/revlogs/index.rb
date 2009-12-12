@@ -1,6 +1,6 @@
 module Amp
-  module RevlogSupport
-    module Mercurial
+  module Mercurial
+    module RevlogSupport
       include Node
       
       ##

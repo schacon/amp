@@ -677,7 +677,7 @@ class String
   
   # Am I equal to the NULL_ID used in revision logs?
   def null?
-    self == Amp::RevlogSupport::Mercurial::Node::NULL_ID
+    self == Amp::Mercurial::RevlogSupport::Node::NULL_ID
   end
   
   # Am I not equal to the NULL_ID used in revision logs?
