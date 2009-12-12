@@ -123,11 +123,11 @@ module Amp
       # Unified diffs 2 revisions, based on their indices. They are returned in a sexified
       # unified diff format.
       def unified_revision_diff(rev1, old_date, rev2, new_date, path1, path2, opts={})
-        opts = Diffs::MercurialDiff::DEFAULT_OPTIONS.merge(opts)
+        opts = Diffs::Mercurial::MercurialDiff::DEFAULT_OPTIONS.merge(opts)
         version_1 = rev1 ? read(self.node_id_for_index(rev1)) : nil
         version_2 = rev2 ? read(self.node_id_for_index(rev2)) : nil
         
-        Diffs::MercurialDiff.unified_diff( version_1, old_date, version_2, new_date,
+        Diffs::Mercurial::MercurialDiff.unified_diff( version_1, old_date, version_2, new_date,
                                         path1, path2, false, opts)
       end
       

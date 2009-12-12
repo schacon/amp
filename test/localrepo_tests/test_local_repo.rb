@@ -36,11 +36,6 @@ class TestLocalRepo < Test::Unit::TestCase
       assert_not_nil @repo
     end
     
-    def test_get_initial_changeset
-      changeset = @repo[0]
-      assert_equal Amp::Changeset, changeset.class
-    end
-    
     def test_repo_size
       assert_equal 4, @repo.size
     end

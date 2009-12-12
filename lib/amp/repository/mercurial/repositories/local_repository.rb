@@ -359,7 +359,7 @@ module Amp
         # 
         # @return [MergeState] the repository's merge state.
         def merge_state
-          @merge_state ||= Amp::Merges::MergeState.new(self)
+          @merge_state ||= Amp::Merges::Mercurial::MergeState.new(self)
         end
         
         ##
