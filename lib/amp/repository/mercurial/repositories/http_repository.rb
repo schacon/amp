@@ -22,7 +22,7 @@ module Amp
       # The protocol's pretty simple - just ?cmd="command", and any other
       # args you need. Should be pretty easy.
       class HTTPRepository < Repository
-        include RevlogSupport::Mercurial::Node
+        include Mercurial::RevlogSupport::Node
         
         DEFAULT_HEADERS = {"User-agent" => "Amp-#{Amp::VERSION}",
                            "Accept" => "Application/Mercurial-0.1"}
@@ -193,11 +193,11 @@ module Amp
           
           # pick a compression format
           types.each do |x|
-            (type = x and break) if RevlogSupport::Mercurial::ChangeGroup::BUNDLE_HEADERS.include? x
+            (type = x and break) if Mercurial::RevlogSupport::ChangeGroup::BUNDLE_HEADERS.include? x
           end
           
           # compress and create the bundle
-          data = RevlogSupport::Mercurial::ChangeGroup.write_bundle cg, type
+          data = Mercurial::RevlogSupport::ChangeGroup.write_bundle cg, type
           
           # send the data
           resp = do_read 'unbundle', :data => data.string,

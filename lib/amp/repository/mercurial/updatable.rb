@@ -6,7 +6,7 @@ module Amp
       # This module contains all the code that makes a repository able to
       # update its working directory.
       module Updatable
-        include RevlogSupport::Mercurial::Node
+        include Amp::Mercurial::RevlogSupport::Node
         
         ##
         # Updates the repository to the given node. One of the major operations on a repository.
@@ -89,7 +89,7 @@ module Amp
           actions += forget_removed(working_changeset, parent2, branch_merge)
           actions += manifest_merge(working_changeset, parent2, parent_ancestor, 
                                     overwrite, partial)
-                                    
+          p [working_changeset, parent2, parent_ancestor]                          
           ## Apply phase - apply the changes we just generated.
           unless branch_merge # just jump to the new revision
             fp1, fp2, xp1, xp2 = fp2, NULL_ID, xp2, ''
@@ -217,6 +217,7 @@ module Amp
         # @return [[String, Symbol]] A list of actions that should be taken to complete
         #   a successful transition from local to remote.
         def manifest_merge(local, remote, ancestor, overwrite, partial)
+
           UI::status("resolving manifests")
           UI::debug(" overwrite #{overwrite} partial #{partial}")
           UI::debug(" ancestor #{ancestor} local #{local} remote #{remote}")
@@ -260,7 +261,7 @@ module Amp
           if ancestor && !(backwards || overwrite)
             if @config["merge", "followcopies", Boolean, true]
               dirs = @config["merge", "followdirs", Boolean, false] # don't track directory renames
-              copy, diverge = Amp::Graphs::CopyCalculator.find_copies(self, local, remote, ancestor, dirs)
+              copy, diverge = Amp::Graphs::Mercurial::CopyCalculator.find_copies(self, local, remote, ancestor, dirs)
             end
             copied = Hash.with_keys(copy.values)
             diverge.each do |of, fl|

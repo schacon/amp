@@ -6,7 +6,7 @@ module Amp
     # history. You can compare them, sort them, access the changeset, and
     # all sorts of stuff.
     class VersionedFile
-      include RevlogSupport::Mercurial::Node
+      include Mercurial::RevlogSupport::Node
       
       attr_accessor :file_id
       attr_writer   :path

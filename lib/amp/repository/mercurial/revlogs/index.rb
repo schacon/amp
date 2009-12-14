@@ -1,6 +1,6 @@
 module Amp
-  module RevlogSupport
-    module Mercurial
+  module Mercurial
+    module RevlogSupport
       include Node
       
       ##
@@ -85,7 +85,7 @@ module Amp
       # the class will figure out which version it is, and all that jazz.
       #
       class Index
-        include RevlogSupport::Mercurial::Support
+        include Mercurial::RevlogSupport::Support
         include Enumerable
         
         # This is the packed format of the version number of the index.

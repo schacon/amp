@@ -175,6 +175,8 @@ module Amp
           return nil                              # wtf?
         end
         
+        def config; UI.config; end
+        
         ##
         # Picks a merge tool based on the user's settings in hgrc files and environment
         # variables. Returns a hash specifying both the name and path of the
@@ -304,14 +306,14 @@ module Amp
           
           if !(find_tool tool)
             if pat
-              warn("couldn't find merge tool #{tool}")
+              UI.warn("couldn't find merge tool #{tool}")
             else
-              note("couldn't find merge tool #{tool}")
+              UI.note("couldn't find merge tool #{tool}")
             end
           elsif symlink && !(tool_setting(tool, "symlink"))
-            warn("tool #{tool} can't handle symlinks")
+            UI.warn("tool #{tool} can't handle symlinks")
           elsif binary  && !(tool_setting(tool, "binary"))
-            warn("tool #{tool} can't handle binary files")
+            UI.warn("tool #{tool} can't handle binary files")
           elsif false # TODO: add GUI check
           else
             return true

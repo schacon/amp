@@ -16,7 +16,7 @@ module Amp
       attr_accessor :report, :journal, :after_close
       
       ##
-      # @return [Amp::Journal]
+      # @return [Amp::Mercurial::Journal]
       def self.start(file, opts=DEFAULT_OPTS)
         journal = Journal.new opts[:reporter], file, &opts[:after_close]
         

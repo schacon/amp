@@ -39,28 +39,26 @@ module Amp
     autoload :VersionedFile,             "amp/repository/mercurial/versioned_file.rb"
     autoload :VersionedWorkingFile,      "amp/repository/mercurial/versioned_file.rb"
     
-    autoload :Revlog,                    "amp/revlogs/mercurial/revlog.rb"      
-    autoload :Manifest,                  "amp/revlogs/mercurial/manifest.rb"
-    autoload :FileLog,                   "amp/revlogs/mercurial/file_log.rb"
-    autoload :Changeset,                 "amp/revlogs/mercurial/changeset.rb"
-    autoload :WorkingDirectoryChangeset, "amp/revlogs/mercurial/changeset.rb"
-    autoload :ChangeGroup,               "amp/revlogs/mercurial/changegroup.rb"
-    autoload :ChangeLog,                 "amp/revlogs/mercurial/changelog.rb"
+    autoload :Revlog,                    "amp/repository/mercurial/revlogs/revlog.rb"      
+    autoload :Manifest,                  "amp/repository/mercurial/revlogs/manifest.rb"
+    autoload :FileLog,                   "amp/repository/mercurial/revlogs/file_log.rb"
+    autoload :Changeset,                 "amp/repository/mercurial/revlogs/changeset.rb"
+    autoload :WorkingDirectoryChangeset, "amp/repository/mercurial/revlogs/changeset.rb"
+    autoload :ChangeGroup,               "amp/repository/mercurial/revlogs/changegroup.rb"
+    autoload :ChangeLog,                 "amp/repository/mercurial/revlogs/changelog.rb"
   end
   
   module Bundles
     module Mercurial
-      autoload :BundleChangeLog,         "amp/revlogs/mercurial/bundle_revlogs.rb"
-      autoload :BundleFileLog,           "amp/revlogs/mercurial/bundle_revlogs.rb"
-      autoload :BundleManifest,          "amp/revlogs/mercurial/bundle_revlogs.rb"
-      autoload :BundleRevlog,            "amp/revlogs/mercurial/bundle_revlogs.rb"
+      autoload :BundleChangeLog,         "amp/repository/mercurial/revlogs/bundle_revlogs.rb"
+      autoload :BundleFileLog,           "amp/repository/mercurial/revlogs/bundle_revlogs.rb"
+      autoload :BundleManifest,          "amp/repository/mercurial/revlogs/bundle_revlogs.rb"
+      autoload :BundleRevlog,            "amp/repository/mercurial/revlogs/bundle_revlogs.rb"
     end
   end
   
   module Encoding
-    module Mercurial
-      autoload :Base85,                  "amp/encoding/mercurial/base85.rb"
-    end
+    autoload :Base85,                  "amp/encoding/base85.rb"
   end                                      
                                            
   module Diffs
@@ -74,7 +72,7 @@ module Amp
   end
   
   module Graphs
-    autoload :AncestorCalculator,      "amp/graphs/ancestor.rb"
+    autoload :AncestorCalculator,        "amp/graphs/ancestor.rb"
     module Mercurial
       autoload :CopyCalculator,          "amp/graphs/mercurial/copies.rb"
     end
@@ -106,30 +104,31 @@ module Amp
     end
   end
   
-  module RevlogSupport
-    module Mercurial
-      autoload :ChangeGroup,             "amp/revlogs/mercurial/changegroup.rb"
-      autoload :Index,                   "amp/revlogs/mercurial/index.rb"
-      autoload :IndexInlineNG,           "amp/revlogs/mercurial/index.rb"
-      autoload :IndexVersion0,           "amp/revlogs/mercurial/index.rb"
-      autoload :IndexVersionNG,          "amp/revlogs/mercurial/index.rb"
-      autoload :Node,                    "amp/revlogs/mercurial/node.rb"
-      autoload :Support,                 "amp/revlogs/mercurial/revlog_support.rb"
+  
+  module Mercurial
+    module RevlogSupport
+      autoload :ChangeGroup,             "amp/repository/mercurial/revlogs/changegroup.rb"
+      autoload :Index,                   "amp/repository/mercurial/revlogs/index.rb"
+      autoload :IndexInlineNG,           "amp/repository/mercurial/revlogs/index.rb"
+      autoload :IndexVersion0,           "amp/repository/mercurial/revlogs/index.rb"
+      autoload :IndexVersionNG,          "amp/repository/mercurial/revlogs/index.rb"
+      autoload :Node,                    "amp/repository/mercurial/revlogs/node.rb"
+      autoload :Support,                 "amp/repository/mercurial/revlogs/revlog_support.rb"
     end
   end
   
   module Servers
-    autoload :FancyHTTPServer,         "amp/server/fancy_http_server.rb"
-    autoload :HTTPServer,              "amp/server/http_server.rb"
-    autoload :HTTPAuthorizedServer,    "amp/server/http_server.rb"
-    autoload :RepoUserManagement,      "amp/server/repo_user_management.rb"
-    autoload :User,                    "amp/server/amp_user.rb"
-  end
-  
-  module Support
-    autoload :Logger,                  "amp/support/logger.rb"
-    autoload :MultiIO,                 "amp/support/multi_io.rb"
-    autoload :Template,                "amp/templates/template.rb"
+    autoload :FancyHTTPServer,           "amp/server/fancy_http_server.rb"
+    autoload :HTTPServer,                "amp/server/http_server.rb"
+    autoload :HTTPAuthorizedServer,      "amp/server/http_server.rb"
+    autoload :RepoUserManagement,        "amp/server/repo_user_management.rb"
+    autoload :User,                      "amp/server/amp_user.rb"
+  end                                    
+                                         
+  module Support                         
+    autoload :Logger,                    "amp/support/logger.rb"
+    autoload :MultiIO,                   "amp/support/multi_io.rb"
+    autoload :Template,                  "amp/templates/template.rb"
   end
 end
 

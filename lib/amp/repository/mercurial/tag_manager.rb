@@ -7,7 +7,7 @@ module Amp
       # This module handles all tag-related (but not branch tag) functionality
       # of the repository. 
       module TagManager
-        include RevlogSupport::Mercurial::Node
+        include Amp::Mercurial::RevlogSupport::Node
         
         TAG_FORBIDDEN_LETTERS = ":\r\n"
         ##

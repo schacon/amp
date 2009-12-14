@@ -9,7 +9,7 @@ module Amp
       # as your working directory. This makes it pretty damn important, and also
       # pretty damn complicated. Have fun!
       class LocalRepository < Repository
-        include RevlogSupport::Mercurial::Node
+        include Amp::Mercurial::RevlogSupport::Node
         include Repositories::Mercurial::BranchManager
         include Repositories::Mercurial::TagManager
         include Repositories::Mercurial::Updatable
@@ -359,7 +359,7 @@ module Amp
         # 
         # @return [MergeState] the repository's merge state.
         def merge_state
-          @merge_state ||= Amp::Merges::MergeState.new(self)
+          @merge_state ||= Amp::Merges::Mercurial::MergeState.new(self)
         end
         
         ##
@@ -574,7 +574,7 @@ module Amp
           cnr        = nil # scoping
           heads      = nil # scoping
           
-          Journal::start join('journal') do |journal|
+          Amp::Mercurial::Journal::start join('journal') do |journal|
             UI::status 'adding changeset'
             
             # pull of the changeset group
@@ -599,7 +599,7 @@ module Amp
             UI::status 'adding file changes'
             
             loop do
-              f = Amp::RevlogSupport::ChangeGroup.get_chunk source
+              f = Amp::Mercurial::RevlogSupport::ChangeGroup.get_chunk source
               break if f.empty?
               
               UI::debug "adding #{f} revisions"
@@ -779,7 +779,7 @@ module Amp
               node_list = gen_node_list[file_revlog]
               
               if node_list.any?
-                result << RevlogSupport::Mercurial::ChangeGroup.chunk_header(fname.size)
+                result << Amp::Mercurial::RevlogSupport::ChangeGroup.chunk_header(fname.size)
                 result << fname
                 
                 lookup = lookup_revlink_func[file_revlog] # Proc#call
@@ -787,7 +787,7 @@ module Amp
                 file_revlog.group(node_list, lookup) {|chunk| result << chunk }
               end
             end
-            result << RevlogSupport::Mercurial::ChangeGroup.closing_chunk
+            result << Amp::Mercurial::RevlogSupport::ChangeGroup.closing_chunk
             
             run_hook :post_outgoing, :node => nodes[0].hexlify, :source => source
             

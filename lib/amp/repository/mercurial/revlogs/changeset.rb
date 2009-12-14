@@ -7,7 +7,7 @@ module Amp
     # 3adf21, then we can look those up, and work within the repository at the
     # moment of that revision.
     class Changeset
-      include RevlogSupport::Mercurial::Node
+      include Mercurial::RevlogSupport::Node
       include Comparable
       include Enumerable
       
