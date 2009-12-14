@@ -89,7 +89,7 @@ module Amp
           actions += forget_removed(working_changeset, parent2, branch_merge)
           actions += manifest_merge(working_changeset, parent2, parent_ancestor, 
                                     overwrite, partial)
-                                    
+          p [working_changeset, parent2, parent_ancestor]                          
           ## Apply phase - apply the changes we just generated.
           unless branch_merge # just jump to the new revision
             fp1, fp2, xp1, xp2 = fp2, NULL_ID, xp2, ''
@@ -260,7 +260,7 @@ module Amp
           if ancestor && !(backwards || overwrite)
             if @config["merge", "followcopies", Boolean, true]
               dirs = @config["merge", "followdirs", Boolean, false] # don't track directory renames
-              copy, diverge = Amp::Graphs::CopyCalculator.find_copies(self, local, remote, ancestor, dirs)
+              copy, diverge = Amp::Graphs::Mercurial::CopyCalculator.find_copies(self, local, remote, ancestor, dirs)
             end
             copied = Hash.with_keys(copy.values)
             diverge.each do |of, fl|

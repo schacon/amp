@@ -63,7 +63,7 @@ module Amp
           end
           
           reprocess = !opts[:no_minimal]
-          merger = ThreeWayMerger.new(base_text, local_text, other_text)
+          merger = new(base_text, local_text, other_text)
           merger.merge_lines(:name_a => name_a, :name_b => name_b, :reprocess => reprocess) do |line|
             out.write line
           end
