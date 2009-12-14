@@ -574,7 +574,7 @@ module Amp
           cnr        = nil # scoping
           heads      = nil # scoping
           
-          Journal::start join('journal') do |journal|
+          Amp::Mercurial::Journal::start join('journal') do |journal|
             UI::status 'adding changeset'
             
             # pull of the changeset group
@@ -779,7 +779,7 @@ module Amp
               node_list = gen_node_list[file_revlog]
               
               if node_list.any?
-                result << Mercurial::RevlogSupport::ChangeGroup.chunk_header(fname.size)
+                result << Amp::Mercurial::RevlogSupport::ChangeGroup.chunk_header(fname.size)
                 result << fname
                 
                 lookup = lookup_revlink_func[file_revlog] # Proc#call
@@ -787,7 +787,7 @@ module Amp
                 file_revlog.group(node_list, lookup) {|chunk| result << chunk }
               end
             end
-            result << Mercurial::RevlogSupport::ChangeGroup.closing_chunk
+            result << Amp::Mercurial::RevlogSupport::ChangeGroup.closing_chunk
             
             run_hook :post_outgoing, :node => nodes[0].hexlify, :source => source
             

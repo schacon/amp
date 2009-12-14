@@ -217,6 +217,7 @@ module Amp
         # @return [[String, Symbol]] A list of actions that should be taken to complete
         #   a successful transition from local to remote.
         def manifest_merge(local, remote, ancestor, overwrite, partial)
+
           UI::status("resolving manifests")
           UI::debug(" overwrite #{overwrite} partial #{partial}")
           UI::debug(" ancestor #{ancestor} local #{local} remote #{remote}")
