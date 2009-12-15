@@ -9,7 +9,7 @@ module Amp
       # It is quite unfortunate, really, because the one public method
       # that this module provides could easily belong to Mercurial.
       # But it doesn't. C'est la vie.
-      module Picker
+      class MercurialPicker < GenericRepoPicker
         
         def self.pick(config, path='', create=false)
           # hot path so we don't load the HTTP repos!
@@ -20,10 +20,20 @@ module Amp
           return HTTPRepository.new(path, create, config)  if path[0,4] == "http"
         end
         
+        def self.repo_in_dir?(path)
+          while !(File.directory?(File.join(path, ".hg")))
+            old_path, path = path, File.dirname(path)
+            if path == old_path
+              return false
+            end
+          end
+          true
+        end
+        
         ################################
         private
         ################################
-        def self.find_repo path
+        def self.find_repo(path)
           while !(File.directory?(File.join(path, ".hg")))
             old_path, path = path, File.dirname(path)
             if path == old_path

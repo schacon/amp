@@ -17,7 +17,10 @@ module Amp
       # 
       # # Now we create the appropriate local repository
       # mod::Picker.pick config, path, create
-      Mercurial::Picker.pick config, path, create # cheat KILLME
+      GenericRepoPicker.each do |picker|
+        return picker.pick(config, path, create) if picker.repo_in_dir?(path)
+      end
+      #Mercurial::Picker.pick config, path, create # cheat KILLME
     end # def self.pick
     
   end # module Repositories

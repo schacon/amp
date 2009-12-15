@@ -87,6 +87,8 @@ module Amp
   end                                      
   
   module Repositories
+    autoload :GenericRepoPicker,         "amp/repository/generic_repo_picker.rb"
+    autoload :AbstractLocalRepository,   "amp/repository/repository.rb"
     module Mercurial
       autoload :BranchManager,           "amp/repository/mercurial/repo_format/branch_manager.rb"
       autoload :BundleRepository,        "amp/repository/mercurial/repositories/bundle_repository.rb"
@@ -95,7 +97,7 @@ module Amp
       autoload :HTTPSRepository,         "amp/repository/mercurial/repositories/http_repository.rb"
       autoload :LocalRepository,         "amp/repository/mercurial/repositories/local_repository.rb"
       autoload :Lock,                    "amp/repository/mercurial/repo_format/lock.rb"
-      autoload :Picker,                  "amp/repository/mercurial/repository.rb"
+      autoload :MercurialPicker,         "amp/repository/mercurial/repository.rb"
       autoload :Repository,              "amp/repository/mercurial/repository.rb"
       autoload :Stores,                  "amp/repository/mercurial/repo_format/store.rb"
       autoload :TagManager,              "amp/repository/mercurial/repo_format/tag_manager.rb"
@@ -156,7 +158,7 @@ require "amp/dependencies/amp_support.rb"
 require "amp/support/ruby_19_compatibility.rb"
 require "amp/support/support.rb"              
 require "amp/templates/template.rb"
-
+require "amp/repository/mercurial/repository.rb"
 if $cl # if it's a command line app
   include Amp::KernelMethods
   require       "amp/commands/command.rb"
