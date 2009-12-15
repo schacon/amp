@@ -74,13 +74,13 @@ module Amp
   module Graphs
     autoload :AncestorCalculator,        "amp/graphs/ancestor.rb"
     module Mercurial
-      autoload :CopyCalculator,          "amp/graphs/mercurial/copies.rb"
+      autoload :CopyCalculator,          "amp/graphs/copies.rb"
     end
   end                                      
                                            
   module Merges
     module Mercurial                      
-      autoload :MergeState,              "amp/merges/mercurial/merge_state.rb"
+      autoload :MergeState,              "amp/repository/mercurial/repo_format/merge_state.rb"
       autoload :MergeUI,                 "amp/merges/mercurial/merge_ui.rb"
       autoload :ThreeWayMerger,          "amp/merges/mercurial/simple_merge.rb"
     end

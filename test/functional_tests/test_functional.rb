@@ -136,7 +136,7 @@ class TestFunctional < Test::Unit::TestCase
     assert_command_match(/user\: +seydar/, "log", nil, :limit => 1)
     
     # Push upstream to testrepo
-    STDERR.puts "PUSH RESULTS: #{run_amp_command "push"}"
+    run_amp_command "push"
     
     # Switch to testrepo
     exit_repo
