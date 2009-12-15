@@ -88,7 +88,8 @@ module Amp
   
   module Repositories
     autoload :GenericRepoPicker,         "amp/repository/generic_repo_picker.rb"
-    autoload :AbstractLocalRepository,   "amp/repository/repository.rb"
+    autoload :AbstractLocalRepository,   "amp/repository/abstract/abstract_local_repo.rb"
+    autoload :AbstractStagingArea,       "amp/repository/abstract/abstract_staging_area.rb"
     module Mercurial
       autoload :BranchManager,           "amp/repository/mercurial/repo_format/branch_manager.rb"
       autoload :BundleRepository,        "amp/repository/mercurial/repositories/bundle_repository.rb"
