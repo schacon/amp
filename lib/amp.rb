@@ -36,8 +36,8 @@ module Amp
     autoload :Ignore,                    "amp/support/mercurial/ignore.rb"
     
     autoload :Journal,                   "amp/repository/mercurial/repo_format/journal.rb"
-    autoload :VersionedFile,             "amp/repository/mercurial/versioned_file.rb"
-    autoload :VersionedWorkingFile,      "amp/repository/mercurial/versioned_file.rb"
+    autoload :VersionedFile,             "amp/repository/mercurial/revlogs/versioned_file.rb"
+    autoload :VersionedWorkingFile,      "amp/repository/mercurial/revlogs/versioned_file.rb"
     
     autoload :Revlog,                    "amp/repository/mercurial/revlogs/revlog.rb"      
     autoload :Manifest,                  "amp/repository/mercurial/revlogs/manifest.rb"
