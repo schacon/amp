@@ -81,8 +81,8 @@ module Amp
   module Merges
     module Mercurial                      
       autoload :MergeState,              "amp/repository/mercurial/repo_format/merge_state.rb"
-      autoload :MergeUI,                 "amp/merges/mercurial/merge_ui.rb"
-      autoload :ThreeWayMerger,          "amp/merges/mercurial/simple_merge.rb"
+      autoload :MergeUI,                 "amp/repository/mercurial/merging/merge_ui.rb"
+      autoload :ThreeWayMerger,          "amp/repository/mercurial/merging/simple_merge.rb"
     end
   end                                      
   
