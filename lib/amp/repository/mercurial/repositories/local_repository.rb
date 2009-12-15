@@ -221,14 +221,14 @@ module Amp
         end
         
         ##
-        # Locks the repository's .hg/store directory. Returns the lock, or if a block is given,
+        # Locks the repository's working directory. Returns the lock, or if a block is given,
         # runs the block with the lock, and clears the lock afterward.
         #
         # @yield When a block is given, that block is executed under locked
         #  conditions. That code can be guaranteed it is the only code running on the
         #  working directory in a destructive manner.
         # @param [Boolean] wait (true) wait for the lock to expire?
-        # @return [Lock] the lock on the .hg/store directory
+        # @return [Lock] the lock on the working directory
         def lock_working(wait = true)
           return @working_lock_ref if @working_lock_ref && @working_lock_ref.weakref_alive?
           
@@ -1455,7 +1455,6 @@ module Amp
               else
                 # else add it
                 dirstate.add file
-                #Amp::Logger.info("added #{file}")
               end
             end
             
