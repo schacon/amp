@@ -35,7 +35,7 @@ module Amp
   module Mercurial
     autoload :Ignore,                    "amp/support/mercurial/ignore.rb"
     
-    autoload :Journal,                   "amp/repository/mercurial/journal.rb"
+    autoload :Journal,                   "amp/repository/mercurial/repo_format/journal.rb"
     autoload :VersionedFile,             "amp/repository/mercurial/versioned_file.rb"
     autoload :VersionedWorkingFile,      "amp/repository/mercurial/versioned_file.rb"
     
@@ -88,19 +88,19 @@ module Amp
   
   module Repositories
     module Mercurial
-      autoload :BranchManager,           "amp/repository/mercurial/branch_manager.rb"
+      autoload :BranchManager,           "amp/repository/mercurial/repo_format/branch_manager.rb"
       autoload :BundleRepository,        "amp/repository/mercurial/repositories/bundle_repository.rb"
-      autoload :DirState,                "amp/repository/mercurial/dir_state.rb"
+      autoload :DirState,                "amp/repository/mercurial/repo_format/dir_state.rb"
       autoload :HTTPRepository,          "amp/repository/mercurial/repositories/http_repository.rb"
       autoload :HTTPSRepository,         "amp/repository/mercurial/repositories/http_repository.rb"
       autoload :LocalRepository,         "amp/repository/mercurial/repositories/local_repository.rb"
-      autoload :Lock,                    "amp/repository/mercurial/lock.rb"
+      autoload :Lock,                    "amp/repository/mercurial/repo_format/lock.rb"
       autoload :Picker,                  "amp/repository/mercurial/repository.rb"
       autoload :Repository,              "amp/repository/mercurial/repository.rb"
-      autoload :Stores,                  "amp/repository/mercurial/store.rb"
-      autoload :TagManager,              "amp/repository/mercurial/tag_manager.rb"
-      autoload :Updatable,               "amp/repository/mercurial/updatable.rb"
-      autoload :Verification,            "amp/repository/mercurial/verification.rb"
+      autoload :Stores,                  "amp/repository/mercurial/repo_format/store.rb"
+      autoload :TagManager,              "amp/repository/mercurial/repo_format/tag_manager.rb"
+      autoload :Updatable,               "amp/repository/mercurial/repo_format/updatable.rb"
+      autoload :Verification,            "amp/repository/mercurial/repo_format/verification.rb"
     end
   end
   
