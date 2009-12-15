@@ -66,8 +66,8 @@ module Amp
     autoload :SequenceMatcher,         "amp/encoding/difflib.rb"
     
     module Mercurial
-      autoload :MercurialDiff,           "amp/encoding/mercurial/mercurial_diff.rb"
-      autoload :MercurialPatch,          "amp/encoding/mercurial/mercurial_patch.rb"
+      autoload :MercurialDiff,           "amp/repository/mercurial/encoding/mercurial_diff.rb"
+      autoload :MercurialPatch,          "amp/repository/mercurial/encoding/mercurial_patch.rb"
     end
   end
   
