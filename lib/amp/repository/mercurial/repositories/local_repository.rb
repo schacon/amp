@@ -390,6 +390,7 @@ module Amp
           @dirstate = DirState.new(@root, @config, opener)
           @dirstate.read!
         end
+        alias_method :staging_area, :dirstate
         
         ##
         # Returns the URL of this repository. Uses the "file:" scheme as such.

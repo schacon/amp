@@ -51,7 +51,7 @@ module Amp
       #   signed  :fname_size , 32, "filename size"
       #
       # end
-      class DirState
+      class DirState < AbstractStagingArea
         include Amp::Mercurial::Ignore
         include Amp::Mercurial::RevlogSupport::Node
       

@@ -13,6 +13,7 @@ module Amp
       def get_file(filename)
         raise NotImplementedError.new("get_file() must be implemented by subclasses of AbstractChangeset.")
       end
+      alias_method :[], :get_file
 
       ##
       # Returns Date object
